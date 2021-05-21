@@ -7,5 +7,8 @@ namespace AdoptaPatitaMVC.Models
 {
     public class Administrador
     {
+        public int Id_Admin { get; set; }
+        public string Usuario { get; set; }
+        public string Contrasenia { get; set; }
     }
 }
