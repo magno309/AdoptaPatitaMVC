@@ -1,10 +1,12 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AdoptaPatitaMVC.Models
 {
     public class Adoptante{
-        public int Id_Adop {get; set;}
+        public int AdoptanteId {get; set;}
         public String Nombre { get; set; }
         public String Apellido1 { get; set; }
         public String Apellido2 { get; set; }
@@ -14,10 +16,8 @@ namespace AdoptaPatitaMVC.Models
         public String Colonia { get; set; }
         public String Ciudad { get; set; }
         public String Estado { get; set; }
-
-        [DataType(DataType.Date)]
         public DateTime FechaN { get; set; }
 
-        
+
     }
 }

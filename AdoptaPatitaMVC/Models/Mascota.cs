@@ -7,7 +7,7 @@ namespace AdoptaPatitaMVC.Models
     [Table("Mascotas")]
     public class Mascota
     {
-        public int Id_Mascota { get; set; }
+        public int MascotaId { get; set; }
         public string Nombre { get; set; }
         public string Raza { get; set; }
         public string Color { get; set; }

@@ -6,7 +6,7 @@ namespace AdoptaPatitaMVC.Models
     [Table("Refugios")]
     public class Refugio
     {
-        public int Id_Refugio { get; set; }
+        public int RefugioId { get; set; }
         public string Nombre { get; set; }
         public string Direccion { get; set; }
         public string Telefono { get; set; }
