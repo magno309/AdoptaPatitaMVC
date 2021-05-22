@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace AdoptaPatitaMVC.Models
 {
@@ -16,6 +14,8 @@ namespace AdoptaPatitaMVC.Models
         public String Colonia { get; set; }
         public String Ciudad { get; set; }
         public String Estado { get; set; }
+
+        [DataType(DataType.Date)]
         public DateTime FechaN { get; set; }
 
         

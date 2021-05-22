@@ -27,9 +27,9 @@ namespace AdoptaPatitaMVC
         {
             services.AddControllersWithViews();
 
-            /*services.AddDbContext<AdoptaPatitaContext>(options =>
+            services.AddDbContext<AdoptaPatitaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AdoptaPatitaContext"))
-            );*/
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
