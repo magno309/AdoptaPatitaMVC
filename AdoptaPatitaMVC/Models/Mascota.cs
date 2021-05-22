@@ -23,6 +23,5 @@ namespace AdoptaPatitaMVC.Models
         public string Imagen3 { get; set; }
         public string Id_Refugio { get; set; }
 
-
     }
 }
