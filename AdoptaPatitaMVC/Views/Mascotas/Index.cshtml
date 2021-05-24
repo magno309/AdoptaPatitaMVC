@@ -1,0 +1,113 @@
+﻿@model IEnumerable<AdoptaPatitaMVC.Models.Mascota>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Raza)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Color)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sexo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Edad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Peso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tamanio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Esterilizado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Historia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Imagen1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Imagen2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Imagen3)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Id_Refugio)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Raza)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Color)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sexo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Edad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Peso)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tamanio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Esterilizado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Historia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Imagen1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Imagen2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Imagen3)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id_Refugio)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MascotaId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MascotaId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MascotaId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

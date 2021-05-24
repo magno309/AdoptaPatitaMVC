@@ -1,0 +1,42 @@
+﻿@model AdoptaPatitaMVC.Models.RegistroAdopcion
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>RegistroAdopcion</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Mascota)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Mascota.MascotaId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Adoptante)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Adoptante.AdoptanteId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FechaAdop)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FechaAdop)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EnumProceso)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EnumProceso)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.RegistroAdopcionId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

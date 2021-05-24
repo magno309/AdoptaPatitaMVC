@@ -12,6 +12,6 @@ namespace AdoptaPatitaMVC.Data
         public DbSet<Refugio> Refugios { get; set; }
         public DbSet<Administrador> Administradores { get; set; }
         public DbSet<Adoptante> Adoptante { get; set; }
-        public DbSet<RegistroAdopcion> RegistroAdop { get; set; }
+        public DbSet<RegistroAdopcion> RegistrosAdopcion { get; set; }
     }
 }

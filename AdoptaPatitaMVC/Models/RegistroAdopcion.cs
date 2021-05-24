@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 namespace AdoptaPatitaMVC.Models
 {
     public class RegistroAdopcion{
+
+        [Key]
+        public int RegistroAdopcionId { get; set; }
         public int MascotaId { get; set; }
         public int AdoptanteId { get; set; }
         public Mascota Mascota{get;set;}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AdoptaPatitaMVC.Models
@@ -6,6 +7,7 @@ namespace AdoptaPatitaMVC.Models
     [Table("Refugios")]
     public class Refugio
     {
+        [Key]
         public int RefugioId { get; set; }
         public string Nombre { get; set; }
         public string Direccion { get; set; }
