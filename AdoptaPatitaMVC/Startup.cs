@@ -26,10 +26,13 @@ namespace AdoptaPatitaMVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
+            services.AddRazorPages();
             services.AddDbContext<AdoptaPatitaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AdoptaPatitaContext"))
             );
+
+            
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +53,7 @@ namespace AdoptaPatitaMVC
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -57,6 +61,7 @@ namespace AdoptaPatitaMVC
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
