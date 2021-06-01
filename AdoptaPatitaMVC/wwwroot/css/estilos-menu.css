@@ -1,0 +1,36 @@
+.bg-white{
+    background-color: white;
+}
+.letra-morada{
+    color:#BD3898 !important;
+    font-weight: bold;
+}
+.navbar-brand img{
+    width: auto;
+    height: 50px;
+}
+.margen-derecho{
+    margin-right: 10px;
+}
+.navbar button:hover,.bg-green {
+    background-color: #6AA037;
+}
+.navbar button{
+    border-color: #6AA037 ;
+    color:#6AA037;
+    margin-left: 10px;
+}
+.nav-link:hover{
+    background-color: #BD3898;
+    border-radius: 10px;
+    color: white !important;
+}
+.nav-link{
+    margin-right: 15px;
+    margin-left: 15px;
+    padding: 10px;
+}
+.estilos{
+    font-family: 'Quicksand';
+    font-size: 20px;   
+}

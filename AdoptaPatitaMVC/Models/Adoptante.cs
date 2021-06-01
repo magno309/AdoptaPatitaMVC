@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace AdoptaPatitaMVC.Models
 {
     public class Adoptante{
+
+        [Key]
         public int AdoptanteId {get; set;}
         public String Nombre { get; set; }
         public String Apellido1 { get; set; }

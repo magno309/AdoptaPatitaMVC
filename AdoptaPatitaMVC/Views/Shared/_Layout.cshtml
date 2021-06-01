@@ -4,11 +4,44 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AdoptaPatitaMVC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/estilos-menu.css">
+
+    @await RenderSectionAsync("Estilos", required: false)
 </head>
 <body>
     <header>
+        <nav class="estilos navbar navbar-expand-lg navbar-light bg-light bg-white border-bottom">
+        <a class="navbar-brand" href="#"><img src="~/images/logo-grande.JPG"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a  id="link_index" asp-page="/Home/Index" class="letra-morada nav-link">Inicio <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a   id="link_adopta" class="letra-morada nav-link">Adopta</a>
+            </li>
+            <li class="nav-item">
+                <a  id="link_refugios" class="letra-morada nav-link">Refugios</a>
+            </li>
+            <li class="nav-item">
+                <a  id="link_contacta" class="letra-morada nav-link">Contáctanos</a>
+            </li>
+            
+          </ul>
+          <partial name="_LoginPartial" />
+        </div>
+    </nav>
+
+        <!--
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AdoptaPatitaMVC</a>
@@ -28,6 +61,8 @@
                 </div>
             </div>
         </nav>
+
+        -->
     </header>
     <div class="container">
         <main role="main" class="pb-3">

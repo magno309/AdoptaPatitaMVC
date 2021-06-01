@@ -1,0 +1,35 @@
+#boton-tipo{
+    width: 20%;
+    height: auto;
+    border-radius: 10px;
+    background-color: #E5FB6E;
+    font-family: 'Quicksand';
+    font-size: 20px;   
+    color: black;
+    font-weight: 600;
+    border-color: yellowgreen;
+    border-width: 3px;
+    margin: 0 auto;
+    text-align: center;
+
+}
+
+#boton-tipo:hover{
+    background-color: #C2E0BC;
+}
+
+#contenido{
+    margin: 0 auto;
+    display: inline-flex;
+    text-align: center;
+}
+
+#boton-tipo img{
+    width: 80% !important;
+    height: auto;
+}
+
+h1{
+    text-align: center;
+    color: #6AA037;
+}
