@@ -30,7 +30,9 @@ namespace AdoptaPatitaMVC
             services.AddDbContext<AdoptaPatitaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AdoptaPatitaContext"))
             );
-
+            services.AddMvc();
+            services.AddAntiforgery(options => options.HeaderName = "__RequestVerificationToken");
+            services.AddMvc().AddControllersAsServices();
             
             
         }

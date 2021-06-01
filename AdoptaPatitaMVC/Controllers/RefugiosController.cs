@@ -7,16 +7,75 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdoptaPatitaMVC.Data;
 using AdoptaPatitaMVC.Models;
+using System.Text.Json;
 
 namespace AdoptaPatitaMVC.Controllers
 {
     public class RefugiosController : Controller
     {
+        [BindProperty(Name ="idUsr")]
+        public String IdUsr { get; set; }
+
+        [BindProperty(Name ="codeUsr")]
+        public String CodeUsr { get; set; }
+
+
+        [BindProperty(Name ="urlUsr")]
+        public String UrlUsr { get; set; }
+
+
         private readonly AdoptaPatitaContext _context;
 
         public RefugiosController(AdoptaPatitaContext context)
         {
             _context = context;
+        }
+        
+        //GET: Refugios/Registro
+        // PErmite a un usuario no logueado solicitar refistro.
+        public async Task<IActionResult> RegistrarRef()
+        {   
+            return View();
+        }
+
+        public async Task<IActionResult> EnvioDatos( String IdUsr, String codeUsr, String urlUsr){
+
+            Console.WriteLine("Aqui voy a guardar la info enviada: " + IdUsr + "  " + codeUsr + " " + urlUsr);
+            if(TempData.ContainsKey("objRefugio")){
+                String jsonStringRefugio  = TempData["objRefugio"].ToString();
+                Console.WriteLine("JSON STRING: " + jsonStringRefugio);
+                Refugio obj = JsonSerializer.Deserialize<Refugio>(jsonStringRefugio);
+                Console.WriteLine(obj.Email + "  " + obj.Direccion);
+                await Create(obj);
+                Console.WriteLine("Llamé al create");
+                var callbackUrl = Url.Page(
+                        "/Account/ConfirmEmail",
+                        pageHandler: null,
+                        values: new { area = "Identity", userId = IdUsr, code = codeUsr, returnUrl = urlUsr },
+                        protocol: Request.Scheme);
+                Redirect(callbackUrl);
+            } else {
+                Console.WriteLine("No contiene valor el TEmpData");
+                TempData["FalloCrearRefugio"] = "TRUE";
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> SolicitudEnviada(){
+            return View();
+        }
+        public async Task<IActionResult> ErrorSolicitud(){
+            return View();
+        }
+
+        public async Task<IActionResult> ValidarEmail(string userId, string code, string  returnUrl){
+            var callbackUrl = Url.Page(
+                        "/Account/ConfirmEmail",
+                        pageHandler: null,
+                        values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
+                        protocol: Request.Scheme);
+
+            return View();
         }
 
         // GET: Refugios
@@ -56,10 +115,15 @@ namespace AdoptaPatitaMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RefugioId,Nombre,Direccion,Telefono,Email,Contrasenia,Sitio_web")] Refugio refugio)
         {
+            Console.WriteLine("Entramos a CREATE");
             if (ModelState.IsValid)
             {
+                Console.WriteLine("Se está creando el registro ");
                 _context.Add(refugio);
                 await _context.SaveChangesAsync();
+                Console.WriteLine("Se agregó al contexto");
+                TempData["UsuarioCreado"] = "TRUE";
+
                 return RedirectToAction(nameof(Index));
             }
             return View(refugio);

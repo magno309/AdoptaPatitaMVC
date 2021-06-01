@@ -16,5 +16,29 @@ namespace AdoptaPatitaMVC.Models
         public string Contrasenia { get; set; }
         public string Sitio_web { get; set; }
 
+        public Refugio(int RefugioId,string Nombre,string Direccion,string Telefono,string Email,string Contrasenia,string Sitio_web){
+            this.RefugioId = RefugioId; 
+            this.Nombre = Nombre; 
+            this.Direccion = Direccion; 
+            this.Telefono = Telefono; 
+            this.Email = Email; 
+            this.Contrasenia = Contrasenia; 
+            this.Sitio_web = Sitio_web; 
+        }
+
+        public Refugio(string Nombre,string Direccion,string Telefono,string Email,string Contrasenia,string Sitio_web){
+            this.RefugioId = RefugioId; 
+            this.Nombre = Nombre; 
+            this.Direccion = Direccion; 
+            this.Telefono = Telefono; 
+            this.Email = Email; 
+            this.Contrasenia = Contrasenia; 
+            this.Sitio_web = Sitio_web; 
+        }
+
+        public Refugio(){
+            
+        }
+
     }
 }

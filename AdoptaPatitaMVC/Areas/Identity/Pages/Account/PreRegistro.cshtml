@@ -1,0 +1,18 @@
+@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Pre Registro";
+}
+<link rel="stylesheet" href="~/css/preRegistro.css">
+<h1>¿Cómo quieres formar parte de esta plataforma?</h1>
+<div id="contenido">
+    <div id="boton-tipo" class="d-inline "  onclick="location.href='/Refugios/RegistrarRef';">        
+        <img src="~/images/refugio-icono1.png" alt="Refugio">
+        <a   ></a>Refugio</a>
+    </div>
+    <div id="boton-tipo" class="d-inline" onclick="location.href='/Identity/Account/Register';">
+        <img src="~/images/adoptante-icono.png" alt="Adoptante">
+        <a>Adoptante</a>
+    </div>
+</div>

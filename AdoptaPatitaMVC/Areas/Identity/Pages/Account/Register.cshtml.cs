@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -13,6 +14,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using AdoptaPatitaMVC.Models;
+using System.Net;
+using System.IO;
+using Microsoft.AspNetCore.Http.Extensions; 
+using AdoptaPatitaMVC.Controllers;
+using System.Text.Json;
 
 namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
 {
@@ -34,6 +41,8 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            Debug.WriteLine("Hola, se crea el modelo inicial");
+            Console.WriteLine("Esto con consola");
         }
 
         [BindProperty]
@@ -64,15 +73,27 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            Console.WriteLine("GET ASYNC    returnUrl=" + returnUrl);
+            
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
+        
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            
+            Debug.WriteLine("POST VALORES:  Email:" + Request.Form["Input.Email"]
+            + "  Pass= " + Request.Form["Input.Password"]);
+            if(Request.Form["Refugio"].Equals("TRUE")){
+                Input.Email = Request.Form["Input.Email"];
+                Input.Password = Request.Form["Input.Password"];
+                Input.ConfirmPassword = Request.Form["Input.ConfirmPassword"];
+            }
+            
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-            if (ModelState.IsValid)
+            if (ModelState.IsValid || Request.Form["Refugio"].Equals("TRUE"))
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -87,6 +108,19 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
                         pageHandler: null,
                         values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
+                    // Para los refugios, no se les pide confirmación de Email, así que los datos se retornan para futura confirmación
+                    if(Request.Form["Refugio"].Equals("TRUE")){                        
+                        Refugio obj = new Refugio(Request.Form["Nombre"],
+                                            Request.Form["Direccion"],Request.Form["Telefono"],Request.Form["Email"],
+                                            Request.Form["Contrasenia"],Request.Form["Sitio_web"]);
+                        
+                        var options = new JsonSerializerOptions { WriteIndented = true };
+                        string jsonString = JsonSerializer.Serialize(obj, options);
+
+                        TempData["objRefugio"] = jsonString;
+                        return RedirectToAction("EnvioDatos", "/Refugios", 
+                                new{IdUsr = user.Id, codeUsr = code, urlUsr = returnUrl});
+                    }
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
