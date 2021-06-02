@@ -1,102 +1,42 @@
 ﻿@model AdoptaPatitaMVC.Models.Mascota
 
+
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Conoceme!";
 }
 
-<h1>Details</h1>
+<h1>¡Hola, me llamo @Html.DisplayFor(model => model.Nombre)!</h1>
+
+<div class="infoBasica">
+    <div class="img-principal">
+        <img id="imgPrincipal" class="img-principal" src=@Model.Imagen1 alt="Imagen_Principal">
+    </div>
+    <div class="datosMascota">
+        <h4>Datos básicos</h4>
+        <div class="datosBasicos mb-2">
+            <span class="dato-bold">Raza: </span><span>@Html.DisplayFor(model => model.Raza)</span><br>
+            <span class="dato-bold">Color: </span><span>@Html.DisplayFor(model => model.Color)</span><br>
+            <span class="dato-bold">Sexo: </span><span>@Html.DisplayFor(model => model.Sexo)</span><br>
+            <span class="dato-bold">Edad: </span><span>@Html.DisplayFor(model => model.Edad)</span><br>
+            <span class="dato-bold">Peso: </span><span>@Html.DisplayFor(model => model.Peso)</span><br>
+            <span class="dato-bold">Tamaño: </span><span>@Html.DisplayFor(model => model.Tamanio)</span><br>
+            <span class="dato-bold">Esterilizado: </span><span>@Html.DisplayFor(model => model.Esterilizado)</span><br>
+        </div>
+        <hr>
+        <h4>Un poco sobre mi</h4>
+        <div class="datosExtra">
+            <p>@Html.DisplayFor(model => model.Descripcion)</p>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="historiaMascota">
+    <h4>Mi historia</h4>
+    <p>@Html.DisplayFor(model => model.Historia)</p>
+</div>
+
+
 
 <div>
-    <h4>Mascota</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Raza)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Raza)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Color)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Color)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Sexo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Sexo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Edad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Edad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Peso)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Peso)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Tamanio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Tamanio)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Esterilizado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Esterilizado)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Descripcion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Descripcion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Historia)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Historia)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Imagen1)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Imagen1)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Imagen2)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Imagen2)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Imagen3)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Imagen3)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id_Refugio)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id_Refugio)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.MascotaId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-primary">Regresar a la lista</a>
 </div>
