@@ -10,6 +10,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AdoptaPatitaMVC.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
 
 namespace AdoptaPatitaMVC
 {
@@ -34,6 +38,31 @@ namespace AdoptaPatitaMVC
             services.AddAntiforgery(options => options.HeaderName = "__RequestVerificationToken");
             services.AddMvc().AddControllersAsServices();
             
+            //Inyectar la configuración de JWT
+            //services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
+
+            //cofigurar autenticación para JWT
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(jwt => {
+                var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = new TokenValidationParameters{
+                    ValidateIssuerSigningKey= true, // validar la 3ra parte del jwt usando el secret key de appsettings 
+                    IssuerSigningKey = new SymmetricSecurityKey(key), // agregar el secret key a la encriptación Jwt
+                    ValidateIssuer = false, 
+                    ValidateAudience = false,
+                    RequireExpirationTime = false,
+                    ValidateLifetime = true
+                }; 
+            });           
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddEntityFrameworkStores<AdoptaPatitaContext>();
             
         }
 

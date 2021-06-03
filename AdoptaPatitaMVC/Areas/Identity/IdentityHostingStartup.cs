@@ -16,14 +16,14 @@ namespace AdoptaPatitaMVC.Areas.Identity
         public void Configure(IWebHostBuilder builder)
         {
             
-            builder.ConfigureServices((context, services) => {
+            /*builder.ConfigureServices((context, services) => {
                 services.AddDbContext<AdoptaPatitaContext>(options =>
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("AdoptaPatitaMVCIdentityDbContextConnection")));
 
                 services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                     .AddEntityFrameworkStores<AdoptaPatitaContext>();
-            });
+            });*/
             
         }
     }
