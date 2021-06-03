@@ -4,62 +4,29 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nombre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Direccion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Telefono)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Contrasenia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sitio_web)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Contrasenia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sitio_web)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RefugioId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RefugioId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RefugioId">Delete</a>
-            </td>
-        </tr>
+@section Estilos{
+    <link rel="stylesheet" href="~/css/estilos-adopta.css" />
 }
-    </tbody>
-</table>
+
+<h1>Lista de refugios</h1>
+
+<div class="container col-sm-8">
+    <div class="card-deck">
+        @foreach (var item in Model)
+        {
+            <div id="tarjeta" + @item.RefugioId class="card tarjeta-perfil col-sm-4">
+                <img src="~/images/refugio-icono.jpg" class="card-img-top" alt="Foto de perfil" />
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nombre)</h5>
+                    <p class="estilo-caracteristica">Dirección: </p>
+                    <p class="estilo-res">@Html.DisplayFor(modelItem => item.Direccion)</p><br>
+                    <p class="estilo-caracteristica">Teléfono: </p>
+                    <p class="estilo-res">@Html.DisplayFor(modelItem => item.Telefono)</p>
+                    <form method="post" action="@Url.Action("Details", "Refugios", new {id=item.RefugioId})">
+                        <button type="submit" class="btn btn-primary btn-lg">Detalles</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+</div>

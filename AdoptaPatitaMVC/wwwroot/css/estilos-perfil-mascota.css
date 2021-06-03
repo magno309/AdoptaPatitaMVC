@@ -1,0 +1,158 @@
+﻿#frame-menu {
+    width: 100%;
+    height: 77px;
+    margin: 0;
+    padding: 0;
+}
+
+.informacion {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin: 0 7rem 3rem 7rem;
+    /*border: 1px solid green;*/
+}
+
+.infoExtra {
+    flex-grow: 1;
+    max-width: 337px;
+    padding: 2rem;
+    text-align: center;
+    margin: 1rem;
+    /*border: 1px solid red;*/
+}
+
+.img-info-refugio {
+    width: 25px;
+}
+
+.infoMascota {
+    flex-grow: 1;
+    max-width: 723px;
+    padding: 1rem 1rem;
+    margin: 1rem;
+    /*border: 1px solid blue;*/
+}
+
+.nombreMascota {
+    display: block;
+    width: 100%;
+    height: fit-content;
+    text-align: center;
+    /*border: 1px solid grey;*/
+}
+
+.infoBasica {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    /*border: 1px solid rgb(240, 190, 27);*/
+    padding: 5px;
+}
+
+.imagenes {
+    max-width: 350px;
+    /*border: 1px solid pink;*/
+}
+
+.img-principal {
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    margin-bottom: 4px;
+}
+
+.miniatura {
+    width: 100px;
+    height: 100px;
+    margin: 5px 0 5px 5px;
+}
+
+    .miniatura.active {
+        opacity: .6;
+    }
+
+.datosMascota {
+    max-width: 300px;
+    /*border:1px solid purple;*/
+}
+
+.datosBasicos {
+    display: inline-block;
+}
+
+.dato-bold {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.historiaMascota {
+    max-width: 685px;
+}
+
+.pregunta {
+    margin: 0 7rem 3rem 7rem;
+}
+
+.btn {
+    width: 195px;
+}
+
+.letra-blanca {
+    color: white;
+}
+
+h1 {
+    color: #6AA037;
+}
+
+h4 {
+    color: #BD3898;
+}
+
+.morado {
+    border-color: #BD3898;
+    color: #BD3898;
+}
+
+.verde {
+    border-color: #6AA037;
+    color: #6AA037;
+}
+
+.infoExtra .btnPregunta a {
+    text-decoration: none;
+    color: #BD3898;
+}
+
+    .infoExtra .btnPregunta a:hover {
+        color: white;
+    }
+
+.infoExtra .btn:hover a {
+    color: white;
+}
+
+.pregunta button:hover, .btnAdoptame button:hover, .bg-green {
+    background-color: #6AA037;
+    border-color: #6AA037;
+    color: white;
+}
+
+.border-green {
+    border-color: #6AA037;
+}
+
+.btnPregunta button:hover, .btnRefugio button:hover, .bg-morado {
+    background-color: #BD3898;
+    border-color: #BD3898;
+    color: white;
+}
+
+.border-morado {
+    border-color: #BD3898;
+}
+
+.btnEnviarPregunta {
+    width: 100%;
+}

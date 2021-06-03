@@ -24,13 +24,13 @@
             
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a  id="link_index" asp-page="/Home/Index" class="letra-morada nav-link">Inicio <span class="sr-only">(current)</span></a>
+              <a id="link_index" asp-page="/Home/Index" class="letra-morada nav-link">Inicio <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a   id="link_adopta" class="letra-morada nav-link">Adopta</a>
+                <a asp-controller="Mascotas" asp-action="Index" id="link_adopta" class="letra-morada nav-link">Adopta</a>
             </li>
             <li class="nav-item">
-                <a  id="link_refugios" class="letra-morada nav-link">Refugios</a>
+                <a asp-controller="Refugios" asp-action="Index" id="link_refugios" class="letra-morada nav-link">Refugios</a>
             </li>
             <li class="nav-item">
                 <a  id="link_contacta" class="letra-morada nav-link">Contáctanos</a>
