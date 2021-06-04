@@ -1,31 +1,64 @@
-﻿@model IEnumerable<AdoptaPatitaMVC.Models.Mascota>
+﻿<!--model IEnumerable<AdoptaPatitaMVC.Models.Mascota>-->
+
+@model AdoptaPatitaMVC.Models.BusquedaMascotaViewModel
+
 
 @{
     ViewData["Title"] = "Lista de mascotas";
 }
 
-@section Estilos{ 
-    <link rel="stylesheet" href="~/css/estilos-adopta.css"/>
+@section Estilos{
+    <link rel="stylesheet" href="~/css/estilos-adopta.css" />
 }
 
 <h1>Lista de mascotas</h1>
 
-<div class="container col-sm-8">
-    <div class="card-deck">
-        @foreach (var item in Model) { 
-            <div id="tarjeta" + @item.MascotaId class="card tarjeta-perfil col-sm-4">
-                <img src=@item.Imagen1 class="card-img-top" alt="Foto de perfil" />
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nombre)</h5>
-                    <p class="estilo-caracteristica">Sexo: </p>
-                    <p class="estilo-res">@Html.DisplayFor(modelItem => item.Sexo)</p><br>
-                    <p class="estilo-caracteristica">Edad: </p>
-                    <p class="estilo-res">@Html.DisplayFor(modelItem => item.Edad)</p>
-                    <form method="post" action="@Url.Action("Details", "Mascotas", new {id=item.MascotaId})">
-                        <button type="submit" class="btn btn-primary btn-lg">Detalles</button>
-                    </form>
-                </div>
+<div id="contenido col-sm-12">
+    <!-- Filtro  -->
+    <div id="cont-izq" class="col-sm-3">
+        <div class="card">
+            <div class="card-header estilo-titulo">
+                Filtro de búsqueda
             </div>
-        }
+            <div class="card-body estilo-tarjeta">
+                <form id="frmFiltro" name="frmFiltro" asp-controller="Mascotas" asp-action="Index" method="get">
+                    <label for="cbTamanio">Tamaño: </label>
+                    <select id="cbTamanio" class="form-control col-sm-11" asp-for="TamanioMascota" asp-items="Model.Tamanios">
+                        <option value="">Cualquiera</option>
+                    </select><br>
+                    <label for="cbSexo">Sexo: </label>
+                    <select id="cbSexo" class="form-control col-sm-11" asp-for="SexoMascota" asp-items="Model.Sexos">
+                        <option value="">Cualquiera</option>
+                    </select><br>
+                    <label for="cbEdad">Edad: </label>
+                    <select id="cbEdad" class="form-control col-sm-11" asp-for="EdadMascota" asp-items="Model.Edades">
+                        <option value="">Cualquiera</option>
+                    </select>
+                    <br>
+                    <button id="btnFiltro" type="submit"> Buscar </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="cont-der" class="col-sm-8">
+        <div class="card-deck">
+            @foreach (var item in Model.Mascotas)
+            {
+                <div id="tarjeta" + @item.MascotaId class="card tarjeta-perfil col-sm-4">
+                    <img src=@item.Imagen1 class="card-img-top" alt="Foto de perfil" />
+                    <div class="card-body">
+                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nombre)</h5>
+                        <p class="estilo-caracteristica">Sexo: </p>
+                        <p class="estilo-res">@Html.DisplayFor(modelItem => item.Sexo)</p><br>
+                        <p class="estilo-caracteristica">Edad: </p>
+                        <p class="estilo-res">@Html.DisplayFor(modelItem => item.Edad)</p>
+                        <form method="post" action="@Url.Action("Details", "Mascotas", new { id = item.MascotaId })">
+                            <button type="submit" class="btn btn-primary btn-lg">Detalles</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>

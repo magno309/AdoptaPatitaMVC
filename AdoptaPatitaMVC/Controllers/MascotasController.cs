@@ -24,9 +24,47 @@ namespace AdoptaPatitaMVC.Controllers
         // GET: Mascotas
         
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string tamanioMascota, string sexoMascota, string edadMascota)
         {
-            return View(await _context.Mascotas.ToListAsync());
+            IQueryable<string> tamanioQuery = from m in _context.Mascotas
+                                              orderby m.Tamanio
+                                              select m.Tamanio;
+
+            IQueryable<string> sexoQuery = from m in _context.Mascotas
+                                              orderby m.Sexo
+                                              select m.Sexo;
+
+            IQueryable<string> edadQuery = from m in _context.Mascotas
+                                              orderby m.Edad
+                                              select m.Edad;
+
+            var mascotas = from m in _context.Mascotas
+                           select m;
+
+            if (!string.IsNullOrEmpty(tamanioMascota))
+            {
+                mascotas = mascotas.Where(x => x.Tamanio == tamanioMascota);
+            }
+
+            if (!string.IsNullOrEmpty(sexoMascota))
+            {
+                mascotas = mascotas.Where(x => x.Sexo == sexoMascota);
+            }
+
+            if (!string.IsNullOrEmpty(edadMascota))
+            {
+                mascotas = mascotas.Where(x => x.Edad == edadMascota);
+            }
+
+            var busquedaMascotaVM = new BusquedaMascotaViewModel
+            {
+                Tamanios = new SelectList(await tamanioQuery.Distinct().ToListAsync()),
+                Edades = new SelectList(await edadQuery.Distinct().ToListAsync()),
+                Sexos = new SelectList(await sexoQuery.Distinct().ToListAsync()),
+                Mascotas = await mascotas.ToListAsync()
+            };
+
+            return View(busquedaMascotaVM);
         }
 
         // GET: Mascotas/Details/5
