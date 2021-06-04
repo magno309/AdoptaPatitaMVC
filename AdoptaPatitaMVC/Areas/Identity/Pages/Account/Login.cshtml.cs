@@ -96,8 +96,8 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
                     _logger.LogInformation("User logged in.");
 
                     //Generar token JWT para el usuario autenticado                    
-                    var jwtToken = GenerateJwtToken(new IdentityUser(){Email = Input.Email, UserName = Input.Email});
-                    Console.WriteLine("TOKEN de "+Input.Email+": "+jwtToken);
+                    /*var jwtToken = GenerateJwtToken(new IdentityUser(){Email = Input.Email, UserName = Input.Email});
+                    Console.WriteLine("TOKEN de "+Input.Email+": "+jwtToken);*/
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
