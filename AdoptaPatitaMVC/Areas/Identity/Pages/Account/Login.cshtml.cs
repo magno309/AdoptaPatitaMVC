@@ -134,13 +134,12 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
             {
                 Subject = new ClaimsIdentity(new []
                 {
-                    new Claim("Id", user.Id),
-                    new Claim(JwtRegisteredClaimNames.NameId, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim("id", user.Id),
+                    new Claim("email", user.Email),
                 }),
                 
                 // Tiempo de vida del token
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddHours(1),
 
                 // Adición de la información del algoritmo de encriptación 
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)

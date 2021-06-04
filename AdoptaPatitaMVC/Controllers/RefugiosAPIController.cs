@@ -8,10 +8,11 @@ using AdoptaPatitaMVC.Models;
 using AdoptaPatitaMVC.Data;
 using Microsoft.AspNetCore.Authorization;
 using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace AdoptaPatitaMVC.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class RefugiosAPIController : ControllerBase
@@ -27,7 +28,7 @@ namespace AdoptaPatitaMVC.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Refugio>>> GetRefugios()
         {
-            Console.WriteLine("UTC: "+DateTime.UtcNow);
+            //Console.WriteLine("UTC: "+DateTime.UtcNow);            
             return await _context.Refugios.ToListAsync();
         }
 

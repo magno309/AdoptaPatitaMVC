@@ -28,42 +28,35 @@ namespace AdoptaPatitaMVC
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllersWithViews();
-            services.AddRazorPages();
+        {                       
             services.AddDbContext<AdoptaPatitaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AdoptaPatitaContext"))
             );
-            services.AddMvc();
-            services.AddAntiforgery(options => options.HeaderName = "__RequestVerificationToken");
-            services.AddMvc().AddControllersAsServices();
-            
-            //Inyectar la configuración de JWT
-            //services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
-
-            //cofigurar autenticación para JWT
-            services.AddAuthentication(options => {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(jwt => {
-                var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
-
-                jwt.SaveToken = true;
-                jwt.TokenValidationParameters = new TokenValidationParameters{
-                    ValidateIssuerSigningKey= true, // validar la 3ra parte del jwt usando el secret key de appsettings 
-                    IssuerSigningKey = new SymmetricSecurityKey(key), // agregar el secret key a la encriptación Jwt
-                    ValidateIssuer = false, 
-                    ValidateAudience = false,
-                    RequireExpirationTime = false,
-                    ValidateLifetime = true
-                }; 
-            });           
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                    .AddEntityFrameworkStores<AdoptaPatitaContext>();
+                .AddEntityFrameworkStores<AdoptaPatitaContext>();            
             
+            //cofigurar autenticación para JWT
+            services.AddAuthentication()
+                .AddJwtBearer(jwt => {
+                    var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+
+                    jwt.SaveToken = true;
+                    jwt.TokenValidationParameters = new TokenValidationParameters{
+                        ValidateIssuerSigningKey= true, // validar la 3ra parte del jwt usando el secret key de appsettings 
+                        IssuerSigningKey = new SymmetricSecurityKey(key), // agregar el secret key a la encriptación Jwt
+                        ValidateIssuer = false, 
+                        ValidateAudience = false,
+                        RequireExpirationTime = false,
+                        ValidateLifetime = true
+                    }; 
+                });     
+
+            services.AddMvc();
+            services.AddAntiforgery(options => options.HeaderName = "__RequestVerificationToken");
+            services.AddMvc().AddControllersAsServices();                                                      
+            services.AddControllersWithViews();
+            services.AddRazorPages();                                           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
