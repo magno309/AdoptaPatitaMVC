@@ -1,0 +1,133 @@
+﻿#frame-menu {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100px;
+}
+
+body {
+}
+
+/* Filtro */
+#contenido {
+    display: inline-block !important;
+    margin: 0;
+}
+
+#cont-izq {
+    display: inline-block !important;
+    vertical-align: top;
+    padding-left: 10px;
+    padding-right: 0;
+}
+
+h1 {
+    color: #59872E;
+    font-weight: bold;
+    font-size: 35px;
+    font-family: 'Quicksand';
+    text-align: center;
+}
+
+.estilo-titulo {
+    color: #BD3898;
+    font-family: 'Quicksand';
+    font-weight: bold;
+    font-size: 20px;
+    background-color: #EAFFD6;
+}
+
+.estilo-tarjeta {
+    font-family: 'Quicksand';
+    font-size: 15px;
+    padding-left: 5px;
+}
+
+    .estilo-tarjeta label {
+        margin-left: 10px;
+    }
+
+    .estilo-tarjeta select {
+        margin-left: 15px;
+    }
+
+#btnFiltro {
+    padding: 5px 20px 5px 20px;
+    font-family: 'Quicksand';
+    font-size: 15px;
+    padding: 5px 15px 5px 15px;
+    background-color: #59872E;
+    color: white;
+    border-radius: 5px;
+    border-width: 0;
+    outline: none;
+    margin-left: 30px;
+}
+
+    #btnFiltro:focus {
+        outline: none;
+        border: 1px solid #96D45D;
+        box-shadow: 0 0 6px #96D45D;
+    }
+
+    #btnFiltro:hover {
+        border: 1px solid #59872E;
+        background-color: white;
+        color: #59872E;
+    }
+
+/* Perifles */
+#cont-der {
+    display: inline-block !important;
+    vertical-align: top;
+    margin: 0;
+    padding: 0;
+}
+
+.tarjeta-perfil {
+    height: 370px;
+    margin-right: 5px !important;
+    margin-left: 5px !important;
+    margin-bottom: 10px !important;
+    min-width: 250px;
+}
+
+    .tarjeta-perfil img {
+        height: 60%;
+    }
+
+.card-body {
+    height: 40%;
+}
+
+    .card-body h5 {
+        font-family: 'Quicksand';
+        font-size: 22px;
+        font-weight: bolder;
+        color: #59872E;
+        text-align: center;
+    }
+
+    .card-body p {
+        display: inline;
+        font-family: 'Quicksand';
+        font-size: 18px;
+    }
+
+.estilo-caracteristica {
+    font-weight: bold;
+}
+
+.card-deck {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.tarjeta-perfil:hover {
+    background-color: #F2F2F2;
+}
+
+    .tarjeta-perfil:hover h5 {
+        color: #BD3898;
+    }

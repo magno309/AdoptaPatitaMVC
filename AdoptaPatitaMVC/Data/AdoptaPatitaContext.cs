@@ -16,6 +16,8 @@ namespace AdoptaPatitaMVC.Data
         public DbSet<Adoptante> Adoptante { get; set; }
         public DbSet<RegistroAdopcion> RegistrosAdopcion { get; set; }
 
+        public DbSet<SolicitudRefugio> SolicitudRefugios {get; set;}
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

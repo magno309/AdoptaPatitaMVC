@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdoptaPatitaMVC.Data;
 using AdoptaPatitaMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdoptaPatitaMVC.Controllers
 {
+    [Authorize]
     public class MascotasController : Controller
     {
         private readonly AdoptaPatitaContext _context;
@@ -20,12 +22,16 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: Mascotas
+        
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Mascotas.ToListAsync());
         }
 
         // GET: Mascotas/Details/5
+        
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,6 +50,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: Mascotas/Create
+        [Authorize(Roles = "RefugioRole")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +61,7 @@ namespace AdoptaPatitaMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "RefugioRole")]
         public async Task<IActionResult> Create([Bind("MascotaId,Nombre,Raza,Color,Sexo,Edad,Peso,Tamanio,Esterilizado,Descripcion,Historia,Imagen1,Imagen2,Imagen3,Id_Refugio")] Mascota mascota)
         {
             if (ModelState.IsValid)
@@ -66,6 +74,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: Mascotas/Edit/5
+        [Authorize(Roles = "RefugioRole")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +95,7 @@ namespace AdoptaPatitaMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "RefugioRole")]
         public async Task<IActionResult> Edit(int id, [Bind("MascotaId,Nombre,Raza,Color,Sexo,Edad,Peso,Tamanio,Esterilizado,Descripcion,Historia,Imagen1,Imagen2,Imagen3,Id_Refugio")] Mascota mascota)
         {
             if (id != mascota.MascotaId)
@@ -117,6 +127,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: Mascotas/Delete/5
+        [Authorize(Roles = "RefugioRole")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +148,7 @@ namespace AdoptaPatitaMVC.Controllers
         // POST: Mascotas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "RefugioRole")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var mascota = await _context.Mascotas.FindAsync(id);
@@ -145,6 +157,7 @@ namespace AdoptaPatitaMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [AllowAnonymous]
         private bool MascotaExists(int id)
         {
             return _context.Mascotas.Any(e => e.MascotaId == id);

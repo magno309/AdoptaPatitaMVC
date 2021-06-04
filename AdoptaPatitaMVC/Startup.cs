@@ -14,6 +14,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+
 
 namespace AdoptaPatitaMVC
 {
@@ -39,8 +42,9 @@ namespace AdoptaPatitaMVC
             services.AddMvc().AddControllersAsServices();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<AdoptaPatitaContext>();            
-            
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<AdoptaPatitaContext>();                       
+
             //cofigurar autenticación para JWT
             services.AddAuthentication()
                 .AddJwtBearer(jwt => {
@@ -55,7 +59,17 @@ namespace AdoptaPatitaMVC
                         RequireExpirationTime = false,
                         ValidateLifetime = true
                     }; 
-                });                                                                                                                              
+                });                                                                                                                                                         
+            
+            services.AddControllers(config =>
+            {
+                // using Microsoft.AspNetCore.Mvc.Authorization;
+                // using Microsoft.AspNetCore.Authorization;
+                var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
