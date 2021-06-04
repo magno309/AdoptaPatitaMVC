@@ -29,9 +29,14 @@ namespace AdoptaPatitaMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {                       
+            services.AddControllersWithViews();
+            services.AddRazorPages();
             services.AddDbContext<AdoptaPatitaContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AdoptaPatitaContext"))
             );
+            services.AddMvc();
+            services.AddAntiforgery(options => options.HeaderName = "__RequestVerificationToken");
+            services.AddMvc().AddControllersAsServices();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AdoptaPatitaContext>();            
@@ -50,13 +55,7 @@ namespace AdoptaPatitaMVC
                         RequireExpirationTime = false,
                         ValidateLifetime = true
                     }; 
-                });     
-
-            services.AddMvc();
-            services.AddAntiforgery(options => options.HeaderName = "__RequestVerificationToken");
-            services.AddMvc().AddControllersAsServices();                                                      
-            services.AddControllersWithViews();
-            services.AddRazorPages();                                           
+                });                                                                                                                              
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
