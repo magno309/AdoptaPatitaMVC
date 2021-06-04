@@ -4,14 +4,16 @@ using AdoptaPatitaMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdoptaPatitaMVC.Migrations
 {
     [DbContext(typeof(AdoptaPatitaContext))]
-    partial class AdoptaPatitaContextModelSnapshot : ModelSnapshot
+    [Migration("20210601174750_UpdateSolicitud2")]
+    partial class UpdateSolicitud2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

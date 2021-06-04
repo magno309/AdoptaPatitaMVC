@@ -1,0 +1,46 @@
+@model IEnumerable<AdoptaPatitaMVC.Controllers.ListaSolicitudes>
+
+@{
+    ViewData["Title"] = "Solicitudes";
+}
+
+<h1>Listado de solicitudes de refugios</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Dirección</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+
+            <td>
+                 <a asp-action="IntermediarioConfirmacion" asp-route-id="@item.Id">Aceptar</a>
+                 <a asp-action="IntermediarioRechazo" asp-route-id="@item.Id">Rechazar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

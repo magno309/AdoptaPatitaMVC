@@ -30,17 +30,21 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager; // creado por mi
+        
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender, 
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
             Debug.WriteLine("Hola, se crea el modelo inicial");
             Console.WriteLine("Esto con consola");
         }
@@ -56,18 +60,18 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
         {
             [Required]
             [EmailAddress]
-            [Display(Name = "Email")]
+            [Display(Name = "Correo elecrónico")]
             public string Email { get; set; }
 
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "El {0} debe tener al menos {2} y un máximo de {1} caracteres de longitud.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Contraseña")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirme su contraseña")]
+            [Compare("Password", ErrorMessage = "Las contraseñas no coinciden.")]
             public string ConfirmPassword { get; set; }
         }
 
@@ -97,6 +101,7 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
             {
                 var user = new IdentityUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -118,10 +123,29 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
                         string jsonString = JsonSerializer.Serialize(obj, options);
 
                         TempData["objRefugio"] = jsonString;
+                        // Registrar el rol del usuario
+                        if(_roleManager != null){
+                            if (!await _roleManager.RoleExistsAsync(ConstRoles.RefugioRole))
+                            {
+                                await _roleManager.CreateAsync(new IdentityRole(ConstRoles.RefugioRole));
+                            }
+                            await _userManager.AddToRoleAsync(user, ConstRoles.RefugioRole);
+                        } else {Console.WriteLine("RolMANAGER nulo");}
+
                         return RedirectToAction("EnvioDatos", "/Refugios", 
                                 new{IdUsr = user.Id, codeUsr = code, urlUsr = returnUrl});
                     }
+                    // Registrar el rol del usuario Adoptante
+                    
+                    if(_roleManager != null){
+                        if (!await _roleManager.RoleExistsAsync(ConstRoles.AdoptanteRole))
+                        {
+                            await _roleManager.CreateAsync(new IdentityRole(ConstRoles.AdoptanteRole));
+                        }
+                        await _userManager.AddToRoleAsync(user, ConstRoles.AdoptanteRole);
+                    } else {Console.WriteLine("RolMANAGER nulo");}
 
+                    //
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 

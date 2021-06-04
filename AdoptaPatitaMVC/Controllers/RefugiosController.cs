@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using AdoptaPatitaMVC.Data;
 using AdoptaPatitaMVC.Models;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdoptaPatitaMVC.Controllers
 {
+    [AllowAnonymous]
     public class RefugiosController : Controller
     {
         [BindProperty(Name ="idUsr")]
@@ -23,7 +25,7 @@ namespace AdoptaPatitaMVC.Controllers
         [BindProperty(Name ="urlUsr")]
         public String UrlUsr { get; set; }
 
-
+        SolicitudRefugio solicitud;
         private readonly AdoptaPatitaContext _context;
 
         public RefugiosController(AdoptaPatitaContext context)
@@ -33,14 +35,19 @@ namespace AdoptaPatitaMVC.Controllers
         
         //GET: Refugios/Registro
         // PErmite a un usuario no logueado solicitar refistro.
+        [AllowAnonymous]
         public async Task<IActionResult> RegistrarRef()
         {   
             return View();
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> EnvioDatos( String IdUsr, String codeUsr, String urlUsr){
 
             Console.WriteLine("Aqui voy a guardar la info enviada: " + IdUsr + "  " + codeUsr + " " + urlUsr);
+            this.IdUsr = IdUsr;
+            this.CodeUsr = codeUsr;
+            this.UrlUsr = urlUsr;
             if(TempData.ContainsKey("objRefugio")){
                 String jsonStringRefugio  = TempData["objRefugio"].ToString();
                 Console.WriteLine("JSON STRING: " + jsonStringRefugio);
@@ -48,12 +55,13 @@ namespace AdoptaPatitaMVC.Controllers
                 Console.WriteLine(obj.Email + "  " + obj.Direccion);
                 await Create(obj);
                 Console.WriteLine("Llamé al create");
-                var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = IdUsr, code = codeUsr, returnUrl = urlUsr },
-                        protocol: Request.Scheme);
-                Redirect(callbackUrl);
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string jsonString = JsonSerializer.Serialize(this.solicitud, options);
+                TempData["solicitud"] = jsonString;
+                Console.WriteLine("Se guardo el json");
+                
+                return RedirectToAction("IntermediarioCreate", "/SolicitudRefugio");
+                //Console.WriteLine("Se redirecciono y ya se regreso de ahí");                               
             } else {
                 Console.WriteLine("No contiene valor el TEmpData");
                 TempData["FalloCrearRefugio"] = "TRUE";
@@ -61,14 +69,17 @@ namespace AdoptaPatitaMVC.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> SolicitudEnviada(){
             return View();
         }
+
+        [AllowAnonymous]
         public async Task<IActionResult> ErrorSolicitud(){
             return View();
         }
 
-        public async Task<IActionResult> ValidarEmail(string userId, string code, string  returnUrl){
+        /*public async Task<IActionResult> ValidarEmail(string userId, string code, string  returnUrl){
             var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
@@ -76,15 +87,18 @@ namespace AdoptaPatitaMVC.Controllers
                         protocol: Request.Scheme);
 
             return View();
-        }
+        }*/
 
         // GET: Refugios
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Refugios.ToListAsync());
+            
         }
 
         // GET: Refugios/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -103,6 +117,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: Refugios/Create
+        [AllowAnonymous]
         public IActionResult Create()
         {
             return View();
@@ -113,6 +128,7 @@ namespace AdoptaPatitaMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([Bind("RefugioId,Nombre,Direccion,Telefono,Email,Contrasenia,Sitio_web")] Refugio refugio)
         {
             Console.WriteLine("Entramos a CREATE");
@@ -123,13 +139,29 @@ namespace AdoptaPatitaMVC.Controllers
                 await _context.SaveChangesAsync();
                 Console.WriteLine("Se agregó al contexto");
                 TempData["UsuarioCreado"] = "TRUE";
-
-                return RedirectToAction(nameof(Index));
+                this.solicitud = new SolicitudRefugio();
+                this.solicitud.RefugioId = refugio.RefugioId;
+                this.solicitud.userId = this.IdUsr;
+                this.solicitud.code = this.CodeUsr;
+                this.solicitud.returnUrl = this.UrlUsr;
+                this.solicitud.EsAceptado = false;
+                Console.WriteLine(" Solicitud refugio ID" + this.solicitud.RefugioId);
+                
+               return RedirectToAction(nameof(Index));
             }
             return View(refugio);
         }
 
+        
+        [Authorize(Roles ="AdminRole")]
+        public async Task<IActionResult> intermediarioDelete(int id){
+            Console.WriteLine("Entramos a Borrar REFUGIO");
+            await DeleteConfirmed(id);
+            return RedirectToAction(nameof(Index));
+        }
+
         // GET: Refugios/Edit/5
+        [Authorize(Roles ="AdminRole, RefugioRole")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -150,6 +182,8 @@ namespace AdoptaPatitaMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="AdminRole, RefugioRole")]
+
         public async Task<IActionResult> Edit(int id, [Bind("RefugioId,Nombre,Direccion,Telefono,Email,Contrasenia,Sitio_web")] Refugio refugio)
         {
             if (id != refugio.RefugioId)
@@ -181,6 +215,8 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: Refugios/Delete/5
+        [Authorize(Roles ="AdminRole, RefugioRole")]
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -201,6 +237,8 @@ namespace AdoptaPatitaMVC.Controllers
         // POST: Refugios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="AdminRole, RefugioRole")]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var refugio = await _context.Refugios.FindAsync(id);
@@ -209,6 +247,7 @@ namespace AdoptaPatitaMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [AllowAnonymous]
         private bool RefugioExists(int id)
         {
             return _context.Refugios.Any(e => e.RefugioId == id);
