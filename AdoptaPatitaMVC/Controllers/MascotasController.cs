@@ -38,7 +38,8 @@ namespace AdoptaPatitaMVC.Controllers
                                               orderby m.Edad
                                               select m.Edad;
 
-            var mascotas = from m in _context.Mascotas
+            var mascotas = from m in _context.Mascotas join n in _context.RegistrosAdopcion
+                           on m.MascotaId equals n.MascotaId where n.EnumProceso != EstadoProceso.ACEPTADO
                            select m;
 
             if (!string.IsNullOrEmpty(tamanioMascota))
