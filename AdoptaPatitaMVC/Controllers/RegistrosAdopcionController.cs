@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AdoptaPatitaMVC.Data;
 using AdoptaPatitaMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdoptaPatitaMVC.Controllers
 {
+    [AllowAnonymous]
     public class RegistrosAdopcionController : Controller
     {
         private readonly AdoptaPatitaContext _context;

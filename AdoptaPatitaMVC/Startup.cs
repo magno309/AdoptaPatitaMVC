@@ -10,6 +10,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AdoptaPatitaMVC.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace AdoptaPatitaMVC
 {
@@ -34,6 +37,24 @@ namespace AdoptaPatitaMVC
             services.AddAntiforgery(options => options.HeaderName = "__RequestVerificationToken");
             services.AddMvc().AddControllersAsServices();
             
+            /*services.AddDbContext<AdoptaPatitaContext>(options =>
+                    options.UseSqlServer(
+                        Configuration.GetConnectionString("AdoptaPatitaMVCIdentityDbContextConnection")));*/
+                
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<AdoptaPatitaContext>();
+
+            
+            services.AddControllers(config =>
+            {
+                // using Microsoft.AspNetCore.Mvc.Authorization;
+                // using Microsoft.AspNetCore.Authorization;
+                var policy = new AuthorizationPolicyBuilder()
+                                .RequireAuthenticatedUser()
+                                .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
             
         }
 

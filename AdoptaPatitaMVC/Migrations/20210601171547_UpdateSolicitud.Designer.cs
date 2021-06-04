@@ -4,14 +4,16 @@ using AdoptaPatitaMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdoptaPatitaMVC.Migrations
 {
     [DbContext(typeof(AdoptaPatitaContext))]
-    partial class AdoptaPatitaContextModelSnapshot : ModelSnapshot
+    [Migration("20210601171547_UpdateSolicitud")]
+    partial class UpdateSolicitud
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,33 +191,6 @@ namespace AdoptaPatitaMVC.Migrations
                     b.HasIndex("MascotaId");
 
                     b.ToTable("RegistrosAdopcion");
-                });
-
-            modelBuilder.Entity("AdoptaPatitaMVC.Models.SolicitudRefugio", b =>
-                {
-                    b.Property<int>("SolicitudRefugioId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("EsAceptado")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("RefugioId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("returnUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("userId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SolicitudRefugioId");
-
-                    b.ToTable("SolicitudRefugios");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
