@@ -20,6 +20,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http.Extensions; 
 using AdoptaPatitaMVC.Controllers;
 using System.Text.Json;
+using System.Net.Http;
 
 namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
 {
@@ -136,7 +137,6 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
                                 new{IdUsr = user.Id, codeUsr = code, urlUsr = returnUrl});
                     }
                     // Registrar el rol del usuario Adoptante
-                    
                     if(_roleManager != null){
                         if (!await _roleManager.RoleExistsAsync(ConstRoles.AdoptanteRole))
                         {
@@ -144,6 +144,11 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
                         }
                         await _userManager.AddToRoleAsync(user, ConstRoles.AdoptanteRole);
                     } else {Console.WriteLine("RolMANAGER nulo");}
+                    // Añadir un registro 
+                    var crearAdoptante = Url.Action("IntermediarioCreate","/Adoptantes", new{emailUsuario = Input.Email}, Request.Scheme);
+                    HttpClient req = new HttpClient();
+                    var content = await req.GetAsync(crearAdoptante);
+                    Console.WriteLine(await content.Content.ReadAsStringAsync());
 
                     //
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",

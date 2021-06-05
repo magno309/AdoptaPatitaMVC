@@ -45,6 +45,17 @@ namespace AdoptaPatitaMVC.Controllers
             return View(adoptante);
         }
 
+        // Intermediario para el create de Adoptantes
+        public async Task<IActionResult> IntermediarioCreate(String emailUsuario){
+            Console.WriteLine("Entré al intermediario");
+            Adoptante obj = new Adoptante();
+            obj.Email = emailUsuario;
+            obj.FechaN = DateTime.Now;
+            await Create(obj);
+            return RedirectToAction(nameof(Index));
+        }
+
+
         // GET: Adoptantes/Create
         public IActionResult Create()
         {
