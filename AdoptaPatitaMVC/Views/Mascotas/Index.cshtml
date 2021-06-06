@@ -45,8 +45,8 @@
         <div class="card-deck">
             @foreach (var item in Model.Mascotas)
             {
-                <div id="tarjeta" + @item.MascotaId class="card tarjeta-perfil">
-                    <img src="~/imgMascotas/@item.Imagen1.FileName" class="card-img-top" alt="Foto de perfil" />
+                <div id="tarjeta" + @item.MascotaId class="card tarjeta-perfil col-sm-4">
+                    <img src="~/imgMascotas/@item.ImagenURL" class="card-img-top" alt="Foto de perfil" />
                     <div class="card-body">
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nombre)</h5>
                         <p class="estilo-caracteristica">Sexo: </p>

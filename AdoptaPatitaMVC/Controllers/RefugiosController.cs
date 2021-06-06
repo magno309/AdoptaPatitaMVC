@@ -9,6 +9,8 @@ using AdoptaPatitaMVC.Data;
 using AdoptaPatitaMVC.Models;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AdoptaPatitaMVC.Controllers
 {
@@ -27,10 +29,12 @@ namespace AdoptaPatitaMVC.Controllers
 
         SolicitudRefugio solicitud;
         private readonly AdoptaPatitaContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public RefugiosController(AdoptaPatitaContext context)
+        public RefugiosController(AdoptaPatitaContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
         
         //GET: Refugios/Registro
@@ -134,6 +138,15 @@ namespace AdoptaPatitaMVC.Controllers
             Console.WriteLine("Entramos a CREATE");
             if (ModelState.IsValid)
             {
+                if (refugio.Imagen != null)
+                {
+                    string folder = "imgRefugios\\";
+                    string guid = Guid.NewGuid().ToString() + "_" + refugio.Imagen.FileName;
+                    folder += guid;
+                    string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+                    await refugio.Imagen.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+                    refugio.ImagenURL = guid;
+                }
                 Console.WriteLine("Se está creando el registro ");
                 _context.Add(refugio);
                 await _context.SaveChangesAsync();

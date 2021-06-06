@@ -106,12 +106,13 @@ namespace AdoptaPatitaMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                string serverFolder = "";
                 if (mascota.Imagen1 != null) {
-                    string folder = "imgMascotas";
-                    folder += Guid.NewGuid().ToString() + "_" + mascota.Imagen1.FileName;
-                    serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+                    string folder = "imgMascotas\\";
+                    string guid = Guid.NewGuid().ToString() + "_" + mascota.Imagen1.FileName;
+                    folder += guid;
+                    string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
                     await mascota.Imagen1.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+                    mascota.ImagenURL = guid;
                 }
                 _context.Add(mascota);
                 await _context.SaveChangesAsync();

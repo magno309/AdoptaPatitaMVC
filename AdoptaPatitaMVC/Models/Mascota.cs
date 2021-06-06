@@ -27,6 +27,7 @@ namespace AdoptaPatitaMVC.Models
         [Required(ErrorMessage = "Por favor seleccione una imagen!")]
         [NotMapped]
         public IFormFile Imagen1 { get; set; }
+        public string ImagenURL { get; set; }
         public string Id_Refugio { get; set; }
 
     }

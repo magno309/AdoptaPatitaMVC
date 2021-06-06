@@ -15,7 +15,7 @@
         @foreach (var item in Model)
         {
             <div id="tarjeta" + @item.RefugioId class="card tarjeta-perfil col-sm-4">
-                <img src="~/images/refugio-icono.jpg" class="card-img-top" alt="Foto de perfil" />
+                <img src="~/imgRefugios/@item.ImagenURL" class="card-img-top" alt="Foto de perfil" />
                 <div class="card-body">
                     <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nombre)</h5>
                     <p class="estilo-caracteristica">Dirección: </p>
