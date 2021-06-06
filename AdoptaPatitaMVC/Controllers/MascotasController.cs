@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using AdoptaPatitaMVC.Data;
 using AdoptaPatitaMVC.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using System;
 
 namespace AdoptaPatitaMVC.Controllers
 {
@@ -15,22 +17,62 @@ namespace AdoptaPatitaMVC.Controllers
     public class MascotasController : Controller
     {
         private readonly AdoptaPatitaContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public MascotasController(AdoptaPatitaContext context)
+        public MascotasController(AdoptaPatitaContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Mascotas
         
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string tamanioMascota, string sexoMascota, string edadMascota)
         {
-            return View(await _context.Mascotas.ToListAsync());
+            IQueryable<string> tamanioQuery = from m in _context.Mascotas
+                                              orderby m.Tamanio
+                                              select m.Tamanio;
+
+            IQueryable<string> sexoQuery = from m in _context.Mascotas
+                                              orderby m.Sexo
+                                              select m.Sexo;
+
+            IQueryable<string> edadQuery = from m in _context.Mascotas
+                                              orderby m.Edad
+                                              select m.Edad;
+
+            var mascotas = from m in _context.Mascotas join n in _context.RegistrosAdopcion
+                           on m.MascotaId equals n.MascotaId where n.EnumProceso != EstadoProceso.ACEPTADO
+                           select m;
+
+            if (!string.IsNullOrEmpty(tamanioMascota))
+            {
+                mascotas = mascotas.Where(x => x.Tamanio == tamanioMascota);
+            }
+
+            if (!string.IsNullOrEmpty(sexoMascota))
+            {
+                mascotas = mascotas.Where(x => x.Sexo == sexoMascota);
+            }
+
+            if (!string.IsNullOrEmpty(edadMascota))
+            {
+                mascotas = mascotas.Where(x => x.Edad == edadMascota);
+            }
+
+            var busquedaMascotaVM = new BusquedaMascotaViewModel
+            {
+                Tamanios = new SelectList(await tamanioQuery.Distinct().ToListAsync()),
+                Edades = new SelectList(await edadQuery.Distinct().ToListAsync()),
+                Sexos = new SelectList(await sexoQuery.Distinct().ToListAsync()),
+                Mascotas = await mascotas.ToListAsync()
+            };
+
+            return View(busquedaMascotaVM);
         }
 
         // GET: Mascotas/Details/5
-        
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
         {
@@ -57,15 +99,20 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // POST: Mascotas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "RefugioRole")]
-        public async Task<IActionResult> Create([Bind("MascotaId,Nombre,Raza,Color,Sexo,Edad,Peso,Tamanio,Esterilizado,Descripcion,Historia,Imagen1,Imagen2,Imagen3,Id_Refugio")] Mascota mascota)
+        public async Task<IActionResult> Create([Bind("MascotaId,Nombre,Raza,Color,Sexo,Edad,Peso,Tamanio,Esterilizado,Descripcion,Historia,Imagen1,Id_Refugio")] Mascota mascota)
         {
             if (ModelState.IsValid)
             {
+                string serverFolder = "";
+                if (mascota.Imagen1 != null) {
+                    string folder = "imgMascotas";
+                    folder += Guid.NewGuid().ToString() + "_" + mascota.Imagen1.FileName;
+                    serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
+                    await mascota.Imagen1.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
+                }
                 _context.Add(mascota);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -96,7 +143,7 @@ namespace AdoptaPatitaMVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "RefugioRole")]
-        public async Task<IActionResult> Edit(int id, [Bind("MascotaId,Nombre,Raza,Color,Sexo,Edad,Peso,Tamanio,Esterilizado,Descripcion,Historia,Imagen1,Imagen2,Imagen3,Id_Refugio")] Mascota mascota)
+        public async Task<IActionResult> Edit(int id, [Bind("MascotaId,Nombre,Raza,Color,Sexo,Edad,Peso,Tamanio,Esterilizado,Descripcion,Historia,Imagen1,Id_Refugio")] Mascota mascota)
         {
             if (id != mascota.MascotaId)
             {
