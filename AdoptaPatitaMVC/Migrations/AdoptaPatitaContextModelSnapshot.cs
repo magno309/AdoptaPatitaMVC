@@ -104,13 +104,7 @@ namespace AdoptaPatitaMVC.Migrations
                     b.Property<string>("Id_Refugio")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Imagen1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Imagen2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Imagen3")
+                    b.Property<string>("ImagenURL")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
@@ -147,6 +141,9 @@ namespace AdoptaPatitaMVC.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagenURL")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")

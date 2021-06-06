@@ -1,3 +1,5 @@
+@model AdoptaPatitaMVC.Models.Refugio
+
 @{
     ViewData["Title"] = "Registro de Refugio";
 }
@@ -9,130 +11,131 @@
 
 @Html.AntiForgeryToken()
 <div class="card mb-3 estilos-tarjeta">
-        <img id="img1" src="~/images/img-registro.png" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title estilo-texto">¡Registra tu refugio!</h5>
-          <p class="card-text estilo-p ancho-texto">Si quieres formar parte de la iniciativa, y compartir tus
-              mascotas, llena el formulario y solicita registrar tu refugio. 
-              Pronto recibirás respuesta por correo.</p>
-              <br>
-              <form id = "registro-form" name="registro-form">
-                <div class="dropdown-divider"></div>
-                <h3>General</h3>
-                <div class="form-group row estilo-p">
-                    <label for="nameRef" class="col-sm-3 col-form-label">Nombre del refugio </label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" id="nameRef" name="nameRef" >
-                    </div>
-                </div> 
-                <div class="form-group row estilo-p">
-                    <label for="nameRep" class="col-sm-3 col-form-label">Nombre del representante </label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" id="nameRep" name="nameRep" required>
-                    </div>
-                </div> 
-                <div class="form-group row estilo-p">
-                  <label for="txtEmail" class="col-sm-3 col-form-label">Email</label>
-                  <div class="col-sm-9">
+    <img id="img1" src="~/images/img-registro.png" class="card-img-top" alt="...">
+    <div class="card-body">
+        <h5 class="card-title estilo-texto">¡Registra tu refugio!</h5>
+        <p class="card-text estilo-p ancho-texto">
+            Si quieres formar parte de la iniciativa, y compartir tus
+            mascotas, llena el formulario y solicita registrar tu refugio.
+            Pronto recibirás respuesta por correo.
+        </p>
+        <br>
+        <form method="post" enctype="multipart/form-data" id="registro-form" name="registro-form" asp-action="Create" asp-controller="Refugios">
+            <div class="dropdown-divider"></div>
+            <h3>General</h3>
+            <div class="form-group row estilo-p">
+                <label for="nameRef" class="col-sm-3 col-form-label">Nombre del refugio </label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="nameRef" name="nameRef">
+                </div>
+            </div>
+            <div class="form-group row estilo-p">
+                <label for="nameRep" class="col-sm-3 col-form-label">Nombre del representante </label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="nameRep" name="nameRep" required>
+                </div>
+            </div>
+            <div class="form-group row estilo-p">
+                <label for="txtEmail" class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
                     <input type="text" class="form-control" id="txtEmail" name="txtEmail" placeholder="email@ejemplo.com" required>
-                  </div>
                 </div>
-                
-                <div class="form-group row estilo-p">
-                  <label for="txtPass" class="col-sm-3 col-form-label">Contraseña</label>
-                  <div class="col-sm-9">
-                    <input type="password" class="form-control" id="txtPass" name="txtPass" required>
-                  </div>
-                </div>
-                
-                <div class="dropdown-divider"></div>
-                <h3>Contacto</h3>
-                <div class="form-group row estilo-p">
-                    <label for="txtCiudad" class="col-sm-3 col-form-label">Ciudad</label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" id="txtCiudad" name="txtCiudad" required>
-                    </div>
-                </div>  
-                <div class="form-group row estilo-p">
-                    <label for="txtCalle" class="col-sm-3 col-form-label">Calle </label>
-                    <div class="col-sm-9">
-                      <input type="text" class="form-control" id="txtCalle" name="txtCalle" required>
-                    </div>
-                </div>  
-                <div class="form-group row estilo-p">
-                    <label for="txtNumero" class="col-sm-3 col-form-label"> Número </label>
-                    <div class="col-sm-9">
-                      <input type="number" class="form-control estilo-num" id="txtNumero" name="txtNumero" required>
-                    </div>
-                </div> 
-                <div class="form-group row estilo-p">
-                    <label for="txtTel" class="col-sm-3 col-form-label"> Teléfono </label>
-                    <div class="col-sm-9">
-                      <input type="tel" class="form-control estilo-tel" id="txtTel" name="txtTel" required>
-                    </div>
-                </div>  
-                <div class="dropdown-divider"></div>
-                <h3>Refugio</h3>
-                <p class="estilo-p ancho-texto">Cuentanos un poco de ti...</p><br>
-                <div class="form-group row estilo-p">
-                    <label for="txtNumPeludos" class="col-sm-3 col-form-label"> Cantidad de peluditos: </label>
-                    <div class="col-sm-9">
-                      <input type="number" class="form-control estilo-num" id="txtNumPeludos" name="txtNumPeludos" required>
-                    </div>
-                </div> 
-                <div class="form-group row estilo-p">
-                    <label for="txtHistoria" class="col-sm-3 col-form-label"> Historia </label>
-                    <div class="col-sm-9">
-                      <textarea  class="form-control" id="txtHistoria" name="txtHistoria" cols="30" rows="10"></textarea>
-                    </div>
-                </div> 
-                <div class="form-group row estilo-p">
-                    <label for="txtPasos" class="col-sm-3 col-form-label"> Pasos de adopción </label>
-                    <div class="col-sm-9">
-                        <textarea class="form-control" id="txtPasos" name="txtPasos" cols="30" rows="10" required></textarea>
-                    </div>
-                </div> 
-                <div class="form-group row estilo-p">
-                    <label class="col-sm-3 col-form-label"> Foto de perfil </label>
-                    <div class="col-sm-9">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="btnImgPerfil" lang="es">
-                            <label class="custom-file-label" for="btnImgPerfil">Seleccionar Archivo</label>
-                          </div>
-                    </div>
-                </div> 
-                <div class="form-group row estilo-p">
-                    <label  class="col-sm-3 col-form-label"> Imagénes </label>
-                    <div class="col-sm-9">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="btnImgVarias" lang="es">
-                            <label class="custom-file-label" for="btnImgVarias">Seleccionar Archivo</label>
-                          </div>
-                    </div>
-                </div> 
-                <!-- <button type="submit" class="btn estilo-btn" id="btnEnviar">Enviar</button> -->
-            </form>
+            </div>
 
-            <button type="submit" class="btn estilo-btn" id="btnEnviar">Enviar</button>
-        </div>
-      </div>
-    
-    
-      <script type="text/javascript">
+            <div class="form-group row estilo-p">
+                <label for="txtPass" class="col-sm-3 col-form-label">Contraseña</label>
+                <div class="col-sm-9">
+                    <input type="password" class="form-control" id="txtPass" name="txtPass" required>
+                </div>
+            </div>
+
+            <div class="dropdown-divider"></div>
+            <h3>Contacto</h3>
+            <div class="form-group row estilo-p">
+                <label for="txtCiudad" class="col-sm-3 col-form-label">Ciudad</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="txtCiudad" name="txtCiudad" required>
+                </div>
+            </div>
+            <div class="form-group row estilo-p">
+                <label for="txtCalle" class="col-sm-3 col-form-label">Calle </label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="txtCalle" name="txtCalle" required>
+                </div>
+            </div>
+            <div class="form-group row estilo-p">
+                <label for="txtNumero" class="col-sm-3 col-form-label"> Número </label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control estilo-num" id="txtNumero" name="txtNumero" required>
+                </div>
+            </div>
+            <div class="form-group row estilo-p">
+                <label for="txtTel" class="col-sm-3 col-form-label"> Teléfono </label>
+                <div class="col-sm-9">
+                    <input type="tel" class="form-control estilo-tel" id="txtTel" name="txtTel" required>
+                </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <h3>Refugio</h3>
+            <p class="estilo-p ancho-texto">Cuentanos un poco de ti...</p><br>
+            <div class="form-group row estilo-p">
+                <label for="txtNumPeludos" class="col-sm-3 col-form-label"> Cantidad de peluditos: </label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control estilo-num" id="txtNumPeludos" name="txtNumPeludos" required>
+                </div>
+            </div>
+            <div class="form-group row estilo-p">
+                <label for="txtHistoria" class="col-sm-3 col-form-label"> Historia </label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" id="txtHistoria" name="txtHistoria" cols="30" rows="10"></textarea>
+                </div>
+            </div>
+            <div class="form-group row estilo-p">
+                <label for="txtPasos" class="col-sm-3 col-form-label"> Pasos de adopción </label>
+                <div class="col-sm-9">
+                    <textarea class="form-control" id="txtPasos" name="txtPasos" cols="30" rows="10" required></textarea>
+                </div>
+            </div>
+            <div class="form-group row estilo-p">
+                <label class="col-sm-3 col-form-label"> Foto de perfil </label>
+                <div class="col-sm-9">
+                    <div class="custom-file">
+                        <input asp-for="Imagen" class="custom-file-input" id="btnImgPerfil" lang="es">
+                        <label class="custom-file-label" for="btnImgPerfil">Seleccionar Archivo</label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row estilo-p">
+                <label class="col-sm-3 col-form-label"> Imagénes </label>
+                <div class="col-sm-9">
+                    <div class="custom-file">
+                        <input class="custom-file-input" id="btnImgVarias" lang="es">
+                        <label class="custom-file-label" for="btnImgVarias">Seleccionar Archivo</label>
+                    </div>
+                </div>
+            </div>
+            <!-- <button type="submit" class="btn estilo-btn" id="btnEnviar">Enviar</button> -->
+        </form>
+
+        <button type="submit" class="btn estilo-btn" id="btnEnviar">Enviar</button>
+    </div>
+</div>
+
+
+<script type="text/javascript">
         function validaRegistro(){
           if ('@TempData["UsuarioCreado"]'!= null){
             return true;
           }
           return false;
         }
-      </script>
-    
-    
-    
+</script>
 
-    @section Scripts
+
+
+
+@section Scripts
     {
-        <script src="~/js/bootstrapValidator.js"></script>
-        <script src="~/js/registro-validate.js"></script>
-    }
-    
+    <script src="~/js/bootstrapValidator.js"></script>
+    <script src="~/js/registro-validate.js"></script>
+}

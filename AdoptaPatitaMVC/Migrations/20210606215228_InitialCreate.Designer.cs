@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdoptaPatitaMVC.Migrations
 {
     [DbContext(typeof(AdoptaPatitaContext))]
-    [Migration("20210526184939_CreateIdentitySchema")]
-    partial class CreateIdentitySchema
+    [Migration("20210606215228_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,13 +106,7 @@ namespace AdoptaPatitaMVC.Migrations
                     b.Property<string>("Id_Refugio")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Imagen1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Imagen2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Imagen3")
+                    b.Property<string>("ImagenURL")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
@@ -191,6 +185,33 @@ namespace AdoptaPatitaMVC.Migrations
                     b.HasIndex("MascotaId");
 
                     b.ToTable("RegistrosAdopcion");
+                });
+
+            modelBuilder.Entity("AdoptaPatitaMVC.Models.SolicitudRefugio", b =>
+                {
+                    b.Property<int>("SolicitudRefugioId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("EsAceptado")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RefugioId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("returnUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("userId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SolicitudRefugioId");
+
+                    b.ToTable("SolicitudRefugios");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

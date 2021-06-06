@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,6 +15,12 @@ namespace AdoptaPatitaMVC.Models
         public string Telefono { get; set; }
         public string Email { get; set; }
         public string Contrasenia { get; set; }
+        [DataType(DataType.Upload)]
+        [Display(Name = "Imagen del refugio")]
+        [Required(ErrorMessage = "Por favor seleccione una imagen!")]
+        [NotMapped]
+        public IFormFile Imagen { get; set; }
+        public string ImagenURL { get; set; }
         public string Sitio_web { get; set; }
 
         public Refugio(int RefugioId,string Nombre,string Direccion,string Telefono,string Email,string Contrasenia,string Sitio_web){
