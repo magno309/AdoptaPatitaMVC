@@ -22,9 +22,7 @@
                     <p class="estilo-res">@Html.DisplayFor(modelItem => item.Direccion)</p><br>
                     <p class="estilo-caracteristica">Teléfono: </p>
                     <p class="estilo-res">@Html.DisplayFor(modelItem => item.Telefono)</p>
-                    <form method="post" action="@Url.Action("Details", "Refugios", new {id=item.RefugioId})">
-                        <button type="submit" class="btn btn-primary btn-lg">Detalles</button>
-                    </form>
+                    <a asp-action="Details" asp-route-id="@item.RefugioId" class="btn btn-primary">Detalles</a>
                 </div>
             </div>
         }

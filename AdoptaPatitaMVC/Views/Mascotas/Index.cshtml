@@ -45,17 +45,15 @@
         <div class="card-deck">
             @foreach (var item in Model.Mascotas)
             {
-                <div id="tarjeta" + @item.MascotaId class="card tarjeta-perfil col-sm-4">
-                    <img src=@item.Imagen1 class="card-img-top" alt="Foto de perfil" />
+                <div id="tarjeta" + @item.MascotaId class="card tarjeta-perfil">
+                    <img src="~/imgMascotas/@item.Imagen1.FileName" class="card-img-top" alt="Foto de perfil" />
                     <div class="card-body">
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.Nombre)</h5>
                         <p class="estilo-caracteristica">Sexo: </p>
                         <p class="estilo-res">@Html.DisplayFor(modelItem => item.Sexo)</p><br>
                         <p class="estilo-caracteristica">Edad: </p>
                         <p class="estilo-res">@Html.DisplayFor(modelItem => item.Edad)</p>
-                        <form method="post" action="@Url.Action("Details", "Mascotas", new { id = item.MascotaId })">
-                            <button type="submit" class="btn btn-primary btn-lg">Detalles</button>
-                        </form>
+                        <a asp-action="Details" asp-route-id="@item.MascotaId" class="btn btn-primary">Detalles</a>
                     </div>
                 </div>
             }
