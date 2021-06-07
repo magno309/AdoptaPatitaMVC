@@ -25,7 +25,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: RegistrosAdopcion
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string Busqueda)
         {                        
             var emailUserAct = _userManager.GetUserName(User);
 
@@ -35,20 +35,37 @@ namespace AdoptaPatitaMVC.Controllers
                 /*var registrosAdop = _context.RegistrosAdopcion.Include(r => r.Adoptante).Include(r => r.Mascota)
                                 .Where(r => r.AdoptanteId == adoptanteId);
                 return View(await registrosAdop.ToListAsync());*/
-                
-                List<ListaRegistrosAdopcion> listaRegistros = await (from r in _context.RegistrosAdopcion                             
-                            join m in _context.Mascotas on r.MascotaId equals m.MascotaId
-                            join f in _context.Refugios on m.Id_Refugio equals f.RefugioId.ToString()   
-                            where r.AdoptanteId == adoptanteId  
-                            orderby r.FechaAdop descending                       
-                            select new ListaRegistrosAdopcion{
-                                ID = r.RegistroAdopcionId,
-                                Mascota = m.Nombre,
-                                Refugio = f.Nombre,
-                                Adoptante = emailUserAct,
-                                Fecha_Solicitud = r.FechaAdop.Date.ToString(),
-                                Estado = r.EnumProceso
-                            }).ToListAsync();
+                List<ListaRegistrosAdopcion> listaRegistros;
+                if(!String.IsNullOrEmpty(Busqueda)){
+                    listaRegistros = await (from r in _context.RegistrosAdopcion                             
+                        join m in _context.Mascotas on r.MascotaId equals m.MascotaId
+                        join f in _context.Refugios on m.Id_Refugio equals f.RefugioId.ToString()   
+                        where r.AdoptanteId == adoptanteId  
+                        orderby r.FechaAdop descending                       
+                        select new ListaRegistrosAdopcion{
+                            ID = r.RegistroAdopcionId,
+                            Mascota = m.Nombre,
+                            Refugio = f.Nombre,
+                            Adoptante = emailUserAct,
+                            Fecha_Solicitud = r.FechaAdop.Date.ToString(),
+                            Estado = r.EnumProceso
+                        }).Where(r => r.Mascota.Contains(Busqueda)).ToListAsync();
+                    //Console.WriteLine(listaRegistros);
+                    return View("IndexR", listaRegistros);
+                }
+                listaRegistros = await (from r in _context.RegistrosAdopcion                             
+                    join m in _context.Mascotas on r.MascotaId equals m.MascotaId
+                    join f in _context.Refugios on m.Id_Refugio equals f.RefugioId.ToString()   
+                    where r.AdoptanteId == adoptanteId  
+                    orderby r.FechaAdop descending                       
+                    select new ListaRegistrosAdopcion{
+                        ID = r.RegistroAdopcionId,
+                        Mascota = m.Nombre,
+                        Refugio = f.Nombre,
+                        Adoptante = emailUserAct,
+                        Fecha_Solicitud = r.FechaAdop.Date.ToString(),
+                        Estado = r.EnumProceso
+                    }).ToListAsync();
                 //Console.WriteLine(listaRegistros);
                 return View("IndexR", listaRegistros);
 
@@ -63,20 +80,37 @@ namespace AdoptaPatitaMVC.Controllers
                                 .Where(r => r.Mascota.Id_Refugio == refugioId)
                                 .Where(r => r.EnumProceso == EstadoProceso.EN_PROCESO);
                 return View(await registrosRefu.ToListAsync());*/
-                
-                List<ListaRegistrosAdopcion> listaRegistros = await (from r in _context.RegistrosAdopcion 
-                            join m in _context.Mascotas on r.MascotaId equals m.MascotaId
-                            join a in _context.Adoptante on r.AdoptanteId equals a.AdoptanteId
-                            where m.Id_Refugio == refugioId
-                            orderby r.FechaAdop descending
-                            select new ListaRegistrosAdopcion{
-                                ID = r.RegistroAdopcionId,
-                                Mascota = m.Nombre,
-                                Refugio = refugio.Nombre,
-                                Adoptante = a.Email,
-                                Fecha_Solicitud = r.FechaAdop.Date.ToString(),
-                                Estado = r.EnumProceso
-                            }).ToListAsync();                
+                List<ListaRegistrosAdopcion> listaRegistros;
+                if(!String.IsNullOrEmpty(Busqueda)){
+                    listaRegistros = await (from r in _context.RegistrosAdopcion 
+                        join m in _context.Mascotas on r.MascotaId equals m.MascotaId
+                        join a in _context.Adoptante on r.AdoptanteId equals a.AdoptanteId
+                        where m.Id_Refugio == refugioId
+                        orderby r.FechaAdop descending
+                        select new ListaRegistrosAdopcion{
+                            ID = r.RegistroAdopcionId,
+                            Mascota = m.Nombre,
+                            Refugio = refugio.Nombre,
+                            Adoptante = a.Email,
+                            Fecha_Solicitud = r.FechaAdop.Date.ToString(),
+                            Estado = r.EnumProceso
+                        }).Where(r => r.Mascota.Contains(Busqueda)).ToListAsync();                
+                    //Console.WriteLine(listaRegistros);
+                    return View("IndexR", listaRegistros);
+                }
+                listaRegistros = await (from r in _context.RegistrosAdopcion 
+                    join m in _context.Mascotas on r.MascotaId equals m.MascotaId
+                    join a in _context.Adoptante on r.AdoptanteId equals a.AdoptanteId
+                    where m.Id_Refugio == refugioId
+                    orderby r.FechaAdop descending
+                    select new ListaRegistrosAdopcion{
+                        ID = r.RegistroAdopcionId,
+                        Mascota = m.Nombre,
+                        Refugio = refugio.Nombre,
+                        Adoptante = a.Email,
+                        Fecha_Solicitud = r.FechaAdop.Date.ToString(),
+                        Estado = r.EnumProceso
+                    }).ToListAsync();                
                 //Console.WriteLine(listaRegistros);
                 return View("IndexR", listaRegistros);
 
@@ -86,20 +120,38 @@ namespace AdoptaPatitaMVC.Controllers
             } 
             /*var registros = _context.RegistrosAdopcion.Include(r => r.Adoptante).Include(r => r.Mascota);            
             return View(await registros.ToListAsync());*/
-            List<ListaRegistrosAdopcion> listaRegistrosA = await (from r in _context.RegistrosAdopcion 
-                        join m in _context.Mascotas on r.MascotaId equals m.MascotaId
-                        join a in _context.Adoptante on r.AdoptanteId equals a.AdoptanteId
-                        join f in _context.Refugios on m.Id_Refugio equals f.RefugioId.ToString()
-                        orderby r.FechaAdop descending
-                        select new ListaRegistrosAdopcion{
-                            ID = r.RegistroAdopcionId,
-                            Mascota = m.Nombre,
-                            Refugio = f.Nombre,
-                            Adoptante = a.Email,
-                            Fecha_Solicitud = r.FechaAdop.Date.ToString(),
-                            Estado = r.EnumProceso
-                        }).ToListAsync();                
+            List<ListaRegistrosAdopcion> listaRegistrosA;
+            if(!String.IsNullOrEmpty(Busqueda)){
+                listaRegistrosA = await (from r in _context.RegistrosAdopcion 
+                    join m in _context.Mascotas on r.MascotaId equals m.MascotaId
+                    join a in _context.Adoptante on r.AdoptanteId equals a.AdoptanteId
+                    join f in _context.Refugios on m.Id_Refugio equals f.RefugioId.ToString()
+                    orderby r.FechaAdop descending
+                    select new ListaRegistrosAdopcion{
+                        ID = r.RegistroAdopcionId,
+                        Mascota = m.Nombre,
+                        Refugio = f.Nombre,
+                        Adoptante = a.Email,
+                        Fecha_Solicitud = r.FechaAdop.Date.ToString(),
+                        Estado = r.EnumProceso
+                    }).Where(r => r.Mascota.Contains(Busqueda)).ToListAsync();                
                 //Console.WriteLine(listaRegistros);
+                return View("IndexR", listaRegistrosA);
+            }
+            listaRegistrosA = await (from r in _context.RegistrosAdopcion 
+                join m in _context.Mascotas on r.MascotaId equals m.MascotaId
+                join a in _context.Adoptante on r.AdoptanteId equals a.AdoptanteId
+                join f in _context.Refugios on m.Id_Refugio equals f.RefugioId.ToString()
+                orderby r.FechaAdop descending
+                select new ListaRegistrosAdopcion{
+                    ID = r.RegistroAdopcionId,
+                    Mascota = m.Nombre,
+                    Refugio = f.Nombre,
+                    Adoptante = a.Email,
+                    Fecha_Solicitud = r.FechaAdop.Date.ToString(),
+                    Estado = r.EnumProceso
+                }).ToListAsync();                
+            //Console.WriteLine(listaRegistros);
             return View("IndexR", listaRegistrosA);
         }
 

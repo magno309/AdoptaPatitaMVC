@@ -5,6 +5,12 @@
 }
 
 <h1>Listado de solicitudes de refugios</h1>
+<form asp-controller="SolicitudRefugio" asp-action="Index" method="get">
+    <p>
+        Nombre: <input type="text" name="Busqueda" />
+        <input type="submit" value="Filtrar" />
+    </p>
+</form>
 
 <table class="table">
     <thead>
