@@ -1,4 +1,6 @@
 ﻿@model AdoptaPatitaMVC.Models.Mascota
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
 
 @{
     ViewData["Title"] = "Create";
@@ -82,11 +84,19 @@
                 <span asp-validation-for="Imagen3" class="text-danger"></span>
             </div>
                 -->
-            <div class="form-group">
-                <label asp-for="Id_Refugio" class="control-label"></label>
-                <input asp-for="Id_Refugio" class="form-control" />
-                <span asp-validation-for="Id_Refugio" class="text-danger"></span>
-            </div>
+            @if(User.IsInRole("AdminRole")){
+                <div class="form-group">
+                    <label asp-for="Id_Refugio" class="control-label"></label>
+                    <input asp-for="Id_Refugio" class="form-control" />
+                    <span asp-validation-for="Id_Refugio" class="text-danger"></span>
+                </div>
+            }  
+            else            
+            {
+                <div class="form-group">
+                    <input asp-for="Id_Refugio" class="form-control" value="0" disabled style="display: none;"/>
+                </div>
+            }          
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

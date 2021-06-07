@@ -10,19 +10,22 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace AdoptaPatitaMVC.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "RefugioRole, AdminRole")]
     public class MascotasController : Controller
     {
         private readonly AdoptaPatitaContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public MascotasController(AdoptaPatitaContext context, IWebHostEnvironment webHostEnvironment)
+        public MascotasController(AdoptaPatitaContext context, IWebHostEnvironment webHostEnvironment, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
         }
 
         // GET: Mascotas
@@ -84,6 +87,12 @@ namespace AdoptaPatitaMVC.Controllers
                 mascotas = mascotas.Where(x => x.Edad == edadMascota);
             }
 
+            if(User.IsInRole(ConstRoles.RefugioRole)){
+                var emailUserAct = _userManager.GetUserName(User);
+                int refugioId = (await _context.Refugios.FirstOrDefaultAsync(r => r.Email == emailUserAct)).RefugioId;
+                mascotas = mascotas.Where(m => m.Id_Refugio == refugioId.ToString());
+            }
+
             var busquedaMascotaVM = new BusquedaMascotaViewModel
             {
                 Tamanios = new SelectList(await tamanioQuery.Distinct().ToListAsync()),
@@ -115,7 +124,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: Mascotas/Create
-        [Authorize(Roles = "RefugioRole")]
+        //[Authorize(Roles = "RefugioRole")]
         public IActionResult Create()
         {
             return View();
@@ -123,8 +132,7 @@ namespace AdoptaPatitaMVC.Controllers
 
         // POST: Mascotas/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "RefugioRole")]
+        [ValidateAntiForgeryToken]        
         public async Task<IActionResult> Create([Bind("MascotaId,Nombre,Raza,Color,Sexo,Edad,Peso,Tamanio,Esterilizado,Descripcion,Historia,Imagen1,Id_Refugio")] Mascota mascota)
         {
             if (ModelState.IsValid)
@@ -137,17 +145,20 @@ namespace AdoptaPatitaMVC.Controllers
                     await mascota.Imagen1.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
                     mascota.ImagenURL = guid;
                 }
-                // Cambiar el ID_Refugio de la mascota recibida aquí
-                //mascota.Id_Refugio = El ID del refugio logueado
+                if(User.IsInRole(ConstRoles.RefugioRole)){
+                    var emailUserAct = _userManager.GetUserName(User);
+                    int refugioId = (await _context.Refugios.FirstOrDefaultAsync(r => r.Email == emailUserAct)).RefugioId;
+                    mascota.Id_Refugio = refugioId.ToString();
+                }                
                 _context.Add(mascota);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(mascota);
         }
-
+        
         // GET: Mascotas/Edit/5
-        [Authorize(Roles = "RefugioRole")]
+        // [Authorize(Roles = "RefugioRole")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -168,7 +179,7 @@ namespace AdoptaPatitaMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "RefugioRole")]
+        //[Authorize(Roles = "RefugioRole")]
         public async Task<IActionResult> Edit(int id, [Bind("MascotaId,Nombre,Raza,Color,Sexo,Edad,Peso,Tamanio,Esterilizado,Descripcion,Historia,Imagen1,Id_Refugio")] Mascota mascota)
         {
             if (id != mascota.MascotaId)
@@ -200,7 +211,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: Mascotas/Delete/5
-        [Authorize(Roles = "RefugioRole")]
+        //[Authorize(Roles = "RefugioRole")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -221,7 +232,7 @@ namespace AdoptaPatitaMVC.Controllers
         // POST: Mascotas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "RefugioRole")]
+        //[Authorize(Roles = "RefugioRole")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var mascota = await _context.Mascotas.FindAsync(id);
