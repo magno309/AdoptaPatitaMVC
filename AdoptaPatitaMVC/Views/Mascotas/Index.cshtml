@@ -2,6 +2,10 @@
 
 @model AdoptaPatitaMVC.Models.BusquedaMascotaViewModel
 
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 
 @{
     ViewData["Title"] = "Lista de mascotas";
@@ -12,6 +16,12 @@
 }
 
 <h1>Lista de mascotas</h1>
+
+@if(SignInManager.IsSignedIn(User) && !User.IsInRole("AdoptanteRole")){
+    <p>
+        <a asp-action="Create">Agregar una mascota</a>
+    </p>
+}
 
 <div id="contenido col-sm-12">
     <!-- Filtro  -->
