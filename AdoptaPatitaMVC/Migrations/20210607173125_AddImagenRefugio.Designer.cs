@@ -4,14 +4,16 @@ using AdoptaPatitaMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdoptaPatitaMVC.Migrations
 {
     [DbContext(typeof(AdoptaPatitaContext))]
-    partial class AdoptaPatitaContextModelSnapshot : ModelSnapshot
+    [Migration("20210607173125_AddImagenRefugio")]
+    partial class AddImagenRefugio
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,6 +143,9 @@ namespace AdoptaPatitaMVC.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagenURL")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")

@@ -138,7 +138,7 @@ namespace AdoptaPatitaMVC.Controllers
             Console.WriteLine("Entramos a CREATE");
             if (ModelState.IsValid)
             {
-                if (refugio.Imagen != null)
+                /*if (refugio.Imagen != null)
                 {
                     string folder = "imgRefugios\\";
                     string guid = Guid.NewGuid().ToString() + "_" + refugio.Imagen.FileName;
@@ -146,7 +146,7 @@ namespace AdoptaPatitaMVC.Controllers
                     string serverFolder = Path.Combine(_webHostEnvironment.WebRootPath, folder);
                     await refugio.Imagen.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
                     refugio.ImagenURL = guid;
-                }
+                }*/
                 Console.WriteLine("Se está creando el registro ");
                 _context.Add(refugio);
                 await _context.SaveChangesAsync();
