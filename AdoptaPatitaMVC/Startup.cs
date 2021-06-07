@@ -10,9 +10,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AdoptaPatitaMVC.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+
 
 namespace AdoptaPatitaMVC
 {
@@ -27,7 +31,7 @@ namespace AdoptaPatitaMVC
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {                       
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddDbContext<AdoptaPatitaContext>(options =>
@@ -36,15 +40,26 @@ namespace AdoptaPatitaMVC
             services.AddMvc();
             services.AddAntiforgery(options => options.HeaderName = "__RequestVerificationToken");
             services.AddMvc().AddControllersAsServices();
-            
-            /*services.AddDbContext<AdoptaPatitaContext>(options =>
-                    options.UseSqlServer(
-                        Configuration.GetConnectionString("AdoptaPatitaMVCIdentityDbContextConnection")));*/
-                
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<AdoptaPatitaContext>();
+                .AddEntityFrameworkStores<AdoptaPatitaContext>();                       
 
+            //cofigurar autenticación para JWT
+            services.AddAuthentication()
+                .AddJwtBearer(jwt => {
+                    var key = Encoding.ASCII.GetBytes(Configuration["JwtConfig:Secret"]);
+
+                    jwt.SaveToken = true;
+                    jwt.TokenValidationParameters = new TokenValidationParameters{
+                        ValidateIssuerSigningKey= true, // validar la 3ra parte del jwt usando el secret key de appsettings 
+                        IssuerSigningKey = new SymmetricSecurityKey(key), // agregar el secret key a la encriptación Jwt
+                        ValidateIssuer = false, 
+                        ValidateAudience = false,
+                        RequireExpirationTime = false,
+                        ValidateLifetime = true
+                    }; 
+                });                                                                                                                                                         
             
             services.AddControllers(config =>
             {
@@ -55,7 +70,6 @@ namespace AdoptaPatitaMVC
                                 .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
             });
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

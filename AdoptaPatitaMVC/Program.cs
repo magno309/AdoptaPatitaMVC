@@ -42,9 +42,16 @@ namespace AdoptaPatitaMVC
 
 
         // EF Core uses this method at design time to access the DbContext
-        public static IHostBuilder CreateHostBuilder(string[] args)
-            => Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(
-                    webBuilder => webBuilder.UseStartup<Startup>());
+        public static IHostBuilder CreateHostBuilder(string[] args) => 
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder => 
+                {
+                    webBuilder.ConfigureKestrel(serverOptions => {
+                        serverOptions.ConfigureHttpsDefaults(co => {
+                            co.SslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+                        });
+                    }).UseStartup<Startup>();
+                }                
+            );
     }
 }

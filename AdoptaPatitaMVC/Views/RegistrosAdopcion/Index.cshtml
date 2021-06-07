@@ -1,10 +1,12 @@
 ﻿@model IEnumerable<AdoptaPatitaMVC.Models.RegistroAdopcion>
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Solicitudes de adopción";
 }
 
-<h1>Index</h1>
+<h1>Listado de solicitudes de adopción</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,16 +15,21 @@
     <thead>
         <tr>
             <th>
+                ID
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Mascota)
             </th>
+            @if(!User.IsInRole("AdoptanteRole")){
+                <th>
+                    @Html.DisplayNameFor(model => model.Adoptante)
+                </th>
+            }
             <th>
-                @Html.DisplayNameFor(model => model.Adoptante)
+                Fecha de solicitud
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FechaAdop)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EnumProceso)
+                Estado
             </th>
             <th></th>
         </tr>
@@ -31,22 +38,35 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Mascota.MascotaId)
+                @Html.DisplayFor(modelItem => item.RegistroAdopcionId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Adoptante.AdoptanteId)
+                @Html.DisplayFor(modelItem => item.Mascota.Nombre)
             </td>
+            @if(!User.IsInRole("AdoptanteRole")){
+                <td>
+                    @Html.DisplayFor(modelItem => item.Adoptante.Email)
+                </td>
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.FechaAdop)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EnumProceso)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.RegistroAdopcionId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.RegistroAdopcionId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.RegistroAdopcionId">Delete</a>
-            </td>
+            @if(User.IsInRole("RefugioRole")){
+                <td>
+                    <a asp-action="IntermediarioConfirmacion" asp-route-id="@item.RegistroAdopcionId">Aceptar</a>
+                    <a asp-action="IntermediarioRechazo" asp-route-id="@item.RegistroAdopcionId">Rechazar</a>
+                </td>                
+            }    
+            @if(User.IsInRole("AdminRole")){                
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.RegistroAdopcionId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.RegistroAdopcionId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.RegistroAdopcionId">Delete</a>
+                </td>
+            }        
         </tr>
 }
     </tbody>

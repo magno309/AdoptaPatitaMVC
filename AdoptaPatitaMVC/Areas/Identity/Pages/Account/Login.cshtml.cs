@@ -11,6 +11,11 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
 {
@@ -20,14 +25,18 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IConfiguration _configuration;
 
         public LoginModel(SignInManager<IdentityUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager, 
+            IConfiguration configuration
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _configuration = configuration;
         }
 
         [BindProperty]
@@ -87,6 +96,10 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+
+                    //Generar token JWT para el usuario autenticado                    
+                    /*var jwtToken = GenerateJwtToken(new IdentityUser(){Email = Input.Email, UserName = Input.Email});
+                    Console.WriteLine("TOKEN de "+Input.Email+": "+jwtToken);*/
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -107,6 +120,38 @@ namespace AdoptaPatitaMVC.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private string GenerateJwtToken(IdentityUser user)
+        {
+            // jwtTokenHandler para crear los tokens
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+
+            // Obtener secret key de appsettings
+            var key = Encoding.ASCII.GetBytes(_configuration["JwtConfig:Secret"]);
+
+            // Los Claims son propiedades del usuario para generar su token
+            Console.WriteLine("UTC: "+DateTime.UtcNow);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new []
+                {
+                    new Claim("id", user.Id),
+                    new Claim("email", user.Email),
+                }),
+                
+                // Tiempo de vida del token
+                Expires = DateTime.UtcNow.AddHours(1),
+
+                // Adición de la información del algoritmo de encriptación 
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
+            };
+
+            // Crear token con las descripciones dadas
+            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+            // Escribir el token 
+            var jwtToken = jwtTokenHandler.WriteToken(token);
+            return jwtToken;
         }
     }
 }

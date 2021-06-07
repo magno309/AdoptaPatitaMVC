@@ -4,14 +4,16 @@ using AdoptaPatitaMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdoptaPatitaMVC.Migrations
 {
     [DbContext(typeof(AdoptaPatitaContext))]
-    partial class AdoptaPatitaContextModelSnapshot : ModelSnapshot
+    [Migration("20210607175138_CambiosModeloRefugio")]
+    partial class CambiosModeloRefugio
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
