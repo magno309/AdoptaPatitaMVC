@@ -42,9 +42,32 @@ namespace AdoptaPatitaMVC.Controllers
                                               orderby m.Edad
                                               select m.Edad;
 
-            var mascotas = from m in _context.Mascotas join n in _context.RegistrosAdopcion
-                           on m.MascotaId equals n.MascotaId where n.EnumProceso != EstadoProceso.ACEPTADO
-                           select m;
+            var mascotas = from m in _context.Mascotas
+                           join n in _context.RegistrosAdopcion
+                           on m.MascotaId equals n.MascotaId into registroMascotas
+                           from rm in registroMascotas.DefaultIfEmpty() where rm.EnumProceso != EstadoProceso.ACEPTADO
+                           select new Mascota
+                           {
+                               MascotaId = m.MascotaId,
+                               Nombre = m.Nombre,
+                               Raza = m.Raza,
+                               Color = m.Color,
+                               Sexo = m.Sexo,
+                               Edad = m.Edad,
+                               Peso = m.Peso,
+                               Tamanio = m.Tamanio,
+                               Esterilizado = m.Esterilizado,
+                               Descripcion = m.Descripcion,
+                               Historia = m.Historia,
+                               ImagenURL = m.ImagenURL,
+                               Id_Refugio = m.Id_Refugio
+                           };
+
+            /*var mascotas = from m in _context.Mascotas
+                         select m;
+
+            var registros = from m in _context.RegistrosAdopcion
+                         select m;*/
 
             if (!string.IsNullOrEmpty(tamanioMascota))
             {
@@ -114,6 +137,8 @@ namespace AdoptaPatitaMVC.Controllers
                     await mascota.Imagen1.CopyToAsync(new FileStream(serverFolder, FileMode.Create));
                     mascota.ImagenURL = guid;
                 }
+                // Cambiar el ID_Refugio de la mascota recibida aquí
+                //mascota.Id_Refugio = El ID del refugio logueado
                 _context.Add(mascota);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
