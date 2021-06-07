@@ -104,6 +104,11 @@ namespace AdoptaPatitaMVC.Controllers
             return View(busquedaMascotaVM);
         }
 
+        [Authorize(Roles ="AdoptanteRole")]
+        public async Task<IActionResult> SolicitudEnviada(){
+            return View();
+        }
+
         // GET: Mascotas/Details/5
         [AllowAnonymous]
         public async Task<IActionResult> Details(int? id)
@@ -119,7 +124,14 @@ namespace AdoptaPatitaMVC.Controllers
             {
                 return NotFound();
             }
+            if(User.IsInRole(ConstRoles.AdoptanteRole)){
+                List<Adoptante> adoptante = _context.Adoptante.Where(a => a.Email.Equals(User.Identity.Name)).ToList();
+                
+                TempData["emailAdop"] = adoptante[0].Email;
+                TempData["IdAdop"] = adoptante[0].AdoptanteId;
 
+            }
+            
             return View(mascota);
         }
 
