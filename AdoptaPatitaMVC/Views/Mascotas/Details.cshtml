@@ -11,11 +11,52 @@
 
 <h1>¡Hola, me llamo @Html.DisplayFor(model => model.Nombre)!</h1>
 
+@using Microsoft.AspNetCore.Identity
+@using AdoptaPatitaMVC.Models
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
 <div class="infoBasica">
     <div class="img-principal">
-        <img id="imgPrincipal" class="img-principal" src=@Model.Imagen1 alt="Imagen_Principal">
+        <img id="imgPrincipal" class="img-principal" src="~/imgMascotas/@Model.ImagenURL" alt="Imagen_Principal">
     </div>
     <div class="datosMascota">
+        @if (SignInManager.IsSignedIn(User)){
+            if(User.IsInRole(ConstRoles.AdoptanteRole) && TempData.ContainsKey("emailAdop")){
+                var idAdoptante = TempData["IdAdop"].ToString();
+                <div class="infoExtra">
+                    <form method="POST" asp-action="Create" asp-controller="RegistrosAdopcion" target="_blank" >
+                        <div class="form-group" style="display: none;">
+                            <label id="MascotaId" name="MascotaId" class="control-label"></label>
+                            <input id="MascotaId" name="MascotaId" class ="form-control"  value="@Model.MascotaId"/>
+                        </div>
+                        <div class="form-group" style="display: none;">
+                            <label id="AdoptanteId" name="AdoptanteId" class="control-label"></label>
+                            <input id="AdoptanteId" name="AdoptanteId" class ="form-control"  value="@idAdoptante"/>
+                        </div>
+                        <div class="form-group" style="display: none;">
+                            <label id="FechaAdop" name="FechaAdop" class="control-label"></label>
+                            <input id="FechaAdop" name="FechaAdop" class="form-control" value="@DateTime.Now"/>
+                            
+                        </div>
+                        <div class="form-group" style="display: none;">
+                            <label id="EnumProceso" name="EnumProceso" class="control-label"></label>
+                            <select id="EnumProceso" name="EnumProceso" asp-items="Html.GetEnumSelectList<EstadoProceso>()" class="form-control" value="EN_PROCESO"></select>
+                            
+                        </div>
+
+
+                        <div class="btnAdoptame">
+                            <button value="@Model.MascotaId" name="idMascotaSel" type="submit"
+                                class="btn btn-outline-success verde">¡Adóptame!</button>
+                        </div>
+                    </form>
+                    <hr>
+                </div>
+            }
+        }
+        
         <h4>Datos básicos</h4>
         <div class="datosBasicos mb-2">
             <span class="dato-bold">Raza: </span><span>@Html.DisplayFor(model => model.Raza)</span><br>
@@ -32,6 +73,8 @@
             <p>@Html.DisplayFor(model => model.Descripcion)</p>
         </div>
     </div>
+    
+    
 </div>
 <hr>
 <div class="historiaMascota">

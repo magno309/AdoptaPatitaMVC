@@ -25,6 +25,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: RegistrosAdopcion
+        [Authorize(Roles = "AdminRole, RefugioRole")]
         public async Task<ActionResult> Index(string Busqueda)
         {                        
             var emailUserAct = _userManager.GetUserName(User);
@@ -178,6 +179,7 @@ namespace AdoptaPatitaMVC.Controllers
         // GET: RegistrosAdopcion/Create
         public IActionResult Create()
         {
+            Console.WriteLine("Entre a este");
             ViewData["AdoptanteId"] = new SelectList(_context.Adoptante, "AdoptanteId", "AdoptanteId");
             ViewData["MascotaId"] = new SelectList(_context.Mascotas, "MascotaId", "MascotaId");
             return View();
@@ -190,11 +192,13 @@ namespace AdoptaPatitaMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RegistroAdopcionId,MascotaId,AdoptanteId,FechaAdop,EnumProceso")] RegistroAdopcion registroAdopcion)
         {
+            Console.WriteLine("Este es el post: " + registroAdopcion.MascotaId + 
+            " " + registroAdopcion.AdoptanteId + " "+ registroAdopcion.FechaAdop);
             if (ModelState.IsValid)
             {
                 _context.Add(registroAdopcion);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("SolicitudEnviada", "Mascotas");
             }
             ViewData["AdoptanteId"] = new SelectList(_context.Adoptante, "AdoptanteId", "AdoptanteId", registroAdopcion.AdoptanteId);
             ViewData["MascotaId"] = new SelectList(_context.Mascotas, "MascotaId", "MascotaId", registroAdopcion.MascotaId);

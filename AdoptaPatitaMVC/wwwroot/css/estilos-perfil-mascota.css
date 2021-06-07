@@ -16,9 +16,9 @@
 .infoExtra {
     flex-grow: 1;
     max-width: 337px;
-    padding: 2rem;
+    /*padding: 2rem;*/
     text-align: center;
-    margin: 1rem;
+    /*margin: 1rem;*/
     /*border: 1px solid red;*/
 }
 
