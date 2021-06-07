@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,15 +30,32 @@
             <li class="nav-item active">
               <a asp-controller="Home" asp-action="Index" id="link_index" class="letra-morada nav-link">Inicio <span class="sr-only">(current)</span></a>
             </li>
-            <li class="nav-item">
-                <a asp-controller="Mascotas" asp-action="Index" id="link_adopta" class="letra-morada nav-link">Adopta</a>
-            </li>
+            @if(SignInManager.IsSignedIn(User) && !User.IsInRole("AdoptanteRole")){
+                <li class="nav-item">
+                    <a asp-controller="Mascotas" asp-action="Index" id="link_adopta" class="letra-morada nav-link">Mascotas</a>
+                </li>
+            }     
+            else{
+                <li class="nav-item">
+                    <a asp-controller="Mascotas" asp-action="Index" id="link_adopta" class="letra-morada nav-link">Adopta</a>
+                </li>
+            }       
             <li class="nav-item">
                 <a asp-controller="Refugios" asp-action="Index" id="link_refugios" class="letra-morada nav-link">Refugios</a>
             </li>
-            <li class="nav-item">
+            @if(SignInManager.IsSignedIn(User)){
+                <li class="nav-item">
+                    <a asp-controller="RegistrosAdopcion" asp-action="Index" id="link_registrosAdopcion" class="letra-morada nav-link">Adopciones</a>
+                </li>
+            }
+            @if(SignInManager.IsSignedIn(User) && User.IsInRole("AdminRole")){
+                <li class="nav-item">
+                    <a asp-controller="SolicitudRefugio" asp-action="Index" id="link_solicitudRefugio" class="letra-morada nav-link">Solicitudes</a>
+                </li>
+            }
+            <!-- <li class="nav-item">
                 <a  id="link_contacta" class="letra-morada nav-link">Contáctanos</a>
-            </li>
+            </li> -->
             
           </ul>
           <partial name="_LoginPartial" />
