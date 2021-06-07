@@ -25,10 +25,23 @@ namespace AdoptaPatitaMVC.Controllers
 
         // Lista todas las solicitudes.
         [Authorize(Roles ="AdminRole")]
-        public ActionResult Index()
+        public ActionResult Index(string Busqueda)
         {
             Console.WriteLine("Estamos en la lista solicitures");
-            List<ListaSolicitudes> listaSolicitudes = (from s in _context.SolicitudRefugios join r in _context.Refugios 
+            List<ListaSolicitudes> listaSolicitudes;
+            if(!string.IsNullOrEmpty(Busqueda)){
+                listaSolicitudes = (from s in _context.SolicitudRefugios join r in _context.Refugios 
+                                    on s.RefugioId equals r.RefugioId 
+                                    select new ListaSolicitudes{
+                                        Id = s.SolicitudRefugioId, 
+                                        Nombre = r.Nombre,
+                                        Direccion = r.Direccion,
+                                        Email = r.Email,
+                                        Telefono = r.Telefono
+                                    }).Where(s => s.Nombre.Contains(Busqueda)).ToList();
+            }   
+            else{
+                listaSolicitudes = (from s in _context.SolicitudRefugios join r in _context.Refugios 
                                     on s.RefugioId equals r.RefugioId 
                                     select new ListaSolicitudes{
                                         Id = s.SolicitudRefugioId, 
@@ -37,8 +50,9 @@ namespace AdoptaPatitaMVC.Controllers
                                         Email = r.Email,
                                         Telefono = r.Telefono
                                     }).ToList();
+            }         
             
-            Console.WriteLine(listaSolicitudes);
+            //Console.WriteLine(listaSolicitudes);
             
             //ViewData.Model = listaSolicitudes;
             

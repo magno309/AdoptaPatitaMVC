@@ -11,6 +11,12 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-controller="RegistrosAdopcion" asp-action="Index" method="get">
+    <p>
+        Mascota: <input type="text" name="Busqueda" />
+        <input type="submit" value="Filtrar" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
