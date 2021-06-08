@@ -25,7 +25,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: RegistrosAdopcion
-        [Authorize(Roles = "AdminRole, RefugioRole")]
+        [Authorize(Roles = "AdminRole, RefugioRole, AdoptanteRole")]
         public async Task<ActionResult> Index(string Busqueda)
         {                        
             var emailUserAct = _userManager.GetUserName(User);

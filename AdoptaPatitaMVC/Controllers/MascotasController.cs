@@ -11,10 +11,11 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using System;
 using Microsoft.AspNetCore.Identity;
+using System.Text.Json;
 
 namespace AdoptaPatitaMVC.Controllers
 {
-    [Authorize(Roles = "RefugioRole, AdminRole")]
+    [Authorize(Roles = "RefugioRole, AdminRole, AdoptanteRole")]
     public class MascotasController : Controller
     {
         private readonly AdoptaPatitaContext _context;
@@ -45,26 +46,25 @@ namespace AdoptaPatitaMVC.Controllers
                                               orderby m.Edad
                                               select m.Edad;
 
-            var mascotas = from m in _context.Mascotas
-                           join n in _context.RegistrosAdopcion
-                           on m.MascotaId equals n.MascotaId into registroMascotas
-                           from rm in registroMascotas.DefaultIfEmpty() where rm.EnumProceso != EstadoProceso.ACEPTADO
-                           select new Mascota
-                           {
-                               MascotaId = m.MascotaId,
-                               Nombre = m.Nombre,
-                               Raza = m.Raza,
-                               Color = m.Color,
-                               Sexo = m.Sexo,
-                               Edad = m.Edad,
-                               Peso = m.Peso,
-                               Tamanio = m.Tamanio,
-                               Esterilizado = m.Esterilizado,
-                               Descripcion = m.Descripcion,
-                               Historia = m.Historia,
-                               ImagenURL = m.ImagenURL,
-                               Id_Refugio = m.Id_Refugio
-                           };
+            
+            
+            List<RegistroAdopcion> raAceptados = (from registro in _context.RegistrosAdopcion
+                                where(registro.EnumProceso == EstadoProceso.ACEPTADO)
+                                select registro).ToList();
+
+            List<Mascota> ListaMascotas = new List<Mascota>();
+            List<Mascota> MascotasTodas = await _context.Mascotas.ToListAsync();
+            foreach (Mascota item in MascotasTodas){
+                bool f = true;
+                foreach(RegistroAdopcion aceptada in raAceptados){
+                    if(item.MascotaId == aceptada.MascotaId){
+                        f = false;
+                    }
+                }
+                if(f){
+                    ListaMascotas.Add(item);
+                }
+            }
 
             /*var mascotas = from m in _context.Mascotas
                          select m;
@@ -74,32 +74,44 @@ namespace AdoptaPatitaMVC.Controllers
 
             if (!string.IsNullOrEmpty(tamanioMascota))
             {
-                mascotas = mascotas.Where(x => x.Tamanio == tamanioMascota);
+                //mascotas = mascotas.Where(x => x.Tamanio == tamanioMascota);
+                ListaMascotas = ListaMascotas.Where(x => x.Tamanio == tamanioMascota).ToList();
             }
 
             if (!string.IsNullOrEmpty(sexoMascota))
             {
-                mascotas = mascotas.Where(x => x.Sexo == sexoMascota);
+                //mascotas = mascotas.Where(x => x.Sexo == sexoMascota);
+                ListaMascotas = ListaMascotas.Where(x => x.Sexo == sexoMascota).ToList();
             }
 
             if (!string.IsNullOrEmpty(edadMascota))
             {
-                mascotas = mascotas.Where(x => x.Edad == edadMascota);
+                //mascotas = mascotas.Where(x => x.Edad == edadMascota);
+                ListaMascotas = ListaMascotas.Where(x => x.Edad == edadMascota).ToList();
             }
 
             if(User.IsInRole(ConstRoles.RefugioRole)){
                 var emailUserAct = _userManager.GetUserName(User);
                 int refugioId = (await _context.Refugios.FirstOrDefaultAsync(r => r.Email == emailUserAct)).RefugioId;
-                mascotas = mascotas.Where(m => m.Id_Refugio == refugioId.ToString());
+                ListaMascotas = ListaMascotas.Where(m => m.Id_Refugio == refugioId.ToString()).ToList();
             }
 
-            var busquedaMascotaVM = new BusquedaMascotaViewModel
+            /*var busquedaMascotaVM = new BusquedaMascotaViewModel  // Lo comentó Isabel
             {
                 Tamanios = new SelectList(await tamanioQuery.Distinct().ToListAsync()),
                 Edades = new SelectList(await edadQuery.Distinct().ToListAsync()),
                 Sexos = new SelectList(await sexoQuery.Distinct().ToListAsync()),
                 Mascotas = await mascotas.ToListAsync()
+            }; */
+            //var lista = mascotas.Distinct();
+
+            var busquedaMascotaVM = new BusquedaMascotaViewModel{
+                Tamanios = new SelectList(await tamanioQuery.Distinct().ToListAsync()),
+                Edades = new SelectList(await edadQuery.Distinct().ToListAsync()),
+                Sexos = new SelectList(await sexoQuery.Distinct().ToListAsync()),
+                Mascotas = ListaMascotas
             };
+            Console.WriteLine(JsonSerializer.Serialize(ListaMascotas).ToString());
 
             return View(busquedaMascotaVM);
         }
