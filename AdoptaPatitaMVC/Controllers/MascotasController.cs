@@ -148,7 +148,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: Mascotas/Create
-        //[Authorize(Roles = "RefugioRole")]
+        [Authorize(Roles = "RefugioRole, AdminRole")]
         public IActionResult Create()
         {
             return View();
@@ -156,7 +156,8 @@ namespace AdoptaPatitaMVC.Controllers
 
         // POST: Mascotas/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]        
+        [ValidateAntiForgeryToken]    
+        [Authorize(Roles = "RefugioRole, AdminRole")]    
         public async Task<IActionResult> Create([Bind("MascotaId,Nombre,Raza,Color,Sexo,Edad,Peso,Tamanio,Esterilizado,Descripcion,Historia,Imagen1,Id_Refugio")] Mascota mascota)
         {
             if (ModelState.IsValid)
@@ -182,7 +183,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
         
         // GET: Mascotas/Edit/5
-        // [Authorize(Roles = "RefugioRole")]
+        [Authorize(Roles = "RefugioRole, AdminRole")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -203,7 +204,7 @@ namespace AdoptaPatitaMVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "RefugioRole")]
+        [Authorize(Roles = "RefugioRole, AdminRole")]
         public async Task<IActionResult> Edit(int id, [Bind("MascotaId,Nombre,Raza,Color,Sexo,Edad,Peso,Tamanio,Esterilizado,Descripcion,Historia,Imagen1,Id_Refugio")] Mascota mascota)
         {
             if (id != mascota.MascotaId)
@@ -235,7 +236,7 @@ namespace AdoptaPatitaMVC.Controllers
         }
 
         // GET: Mascotas/Delete/5
-        //[Authorize(Roles = "RefugioRole")]
+        [Authorize(Roles = "RefugioRole, AdminRole")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -256,7 +257,7 @@ namespace AdoptaPatitaMVC.Controllers
         // POST: Mascotas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        //[Authorize(Roles = "RefugioRole")]
+        [Authorize(Roles = "RefugioRole, AdminRole")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var mascota = await _context.Mascotas.FindAsync(id);
